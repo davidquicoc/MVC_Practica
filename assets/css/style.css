@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: "Google Sans Flex", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    background: #4d4e5e;
+    height: 80px;
+    padding: 15px;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+}
+
+.header a {
+    text-decoration: none;
+}
+
+.header-logo {
+    width: 20%;
+    display: flex;
+
+}
+
+.header-logo h2 {
+    font-size: 2.65rem;
+    color: white;
+    text-transform: uppercase;
+}
+
+.header-navbar {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+}
+
+.header-navbar ul {
+    list-style: none;
+}
+
+.header-navbar ul li {
+    display: inline;
+    margin: 0 20px;
+}
+
+.header-navbar ul li a {
+    font-size: 1.6992rem;
+    color: white;
+}
+
+.header-navbar ul li a:hover {
+    color: #70acb1;
+}
+
+.header-user {
+    width: 20%;
+}
+
+.header-user p {
+    font-size: 1.6992rem;
+    color: white;
+}
+
+.header-user p a {
+    color: #a0a094;
+}
+
+.header-user p a:hover {
+    color: #d9d9e4;
+    text-decoration: underline;
+}
+
+.main {
+    padding: 40px;
+}
+
+.footer {
+    background: #585858;
+    color: white;
+    display: flex;
+    padding: 20px;
+    height: 40px;
+    align-items: center;
+    justify-content: space-around;
+}

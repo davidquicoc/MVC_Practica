@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="David Manuel Quico Cuya">
+    <meta name="website" content="Gestión de libros de una biblioteca">
+    <title><?php echo $tituloPagina; ?></title>
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-logo">
+                <h2>Biblioteca</h2>
+            </div>
+            <nav class="header-navbar">
+                <ul>
+                    <li><a href="index.php">Inicio</a></li>
+                    <?php if (!empty($_SESSION['user'])) { ?>
+                    <li><a href="libro.php">Libros</a></li>
+                    <li><a href="prestamo.php">Préstamo</a></li>
+                    <?php } ?>
+                </ul>
+            </nav>
+            <div class="header-user">
+                <?php
+                    if (!empty($_SESSION['user'])) {
+                        echo "<p>" . $_SESSION['user']['nombre'] . " (<a href='" . BASE_PATH . "/index.php?action=logout'>Cerrar sesión</a>)</p>";
+                    } else {
+                        echo "<p><a href='" . BASE_PATH . "/index.php?action=login'>Iniciar sesión</a></p>";
+                    }                
+                ?>
+            </div>
+        </header>
+        <main class="main">
