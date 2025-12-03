@@ -21,6 +21,10 @@ switch($action) {
     case 'logout':
         (new AuthController())->logout();
         break;
+    // Libro
+    case 'libro':
+        (new BookController())->edit();
+        break;
     default:
         require_once __DIR__ . '/../views/index.php';
         break;

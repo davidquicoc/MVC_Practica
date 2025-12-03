@@ -17,6 +17,14 @@ class Usuario {
         return null;
     }
 
+    public function encontrarPorId($id) {
+        $result = $this->db->query("SELECT * FROM usuario WHERE id = '$id'");
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+        return null;
+    }
+
     public function crearUsuario(array $data) {
         $dniU = $data['dni'];
         $nombreU = $data['nombre'];

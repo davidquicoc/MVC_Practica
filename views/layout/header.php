@@ -18,8 +18,8 @@
                 <ul>
                     <li><a href="index.php">Inicio</a></li>
                     <?php if (!empty($_SESSION['user'])) { ?>
-                    <li><a href="libro.php">Libros</a></li>
-                    <li><a href="prestamo.php">Préstamo</a></li>
+                    <li><a href="libros.php">Libros</a></li>
+                    <li><a href="prestamos.php">Préstamos</a></li>
                     <?php } ?>
                 </ul>
             </nav>
