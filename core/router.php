@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/session.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
+require_once __DIR__ . '/../controllers/BookController.php';
 
 $action = $_GET['action'] ?? null;
 
@@ -21,10 +22,11 @@ switch($action) {
     case 'logout':
         (new AuthController())->logout();
         break;
-    // Libro
-    case 'libro':
-        (new BookController())->edit();
+    //  Libro
+    case 'create-libro':
+        (new BookController())->mostrarCrear();
         break;
+    //  Default
     default:
         require_once __DIR__ . '/../views/index.php';
         break;

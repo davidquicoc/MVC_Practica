@@ -21,7 +21,7 @@ unset($_SESSION['register-confirm']);
                     echo "<p class='error-text'>$error</p>";
                 }
                 if ($register_confirm !== '') {
-                    echo "<p class='register-text'>$error</p>";
+                    echo "<p class='register-text'>$register_confirm</p>";
                 }
             ?>
             <label for="email">Email:</label>

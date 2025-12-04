@@ -52,10 +52,12 @@ class AuthController {
         if (empty($formulario['dni']) || empty($formulario['nombre']) || empty($formulario['apellido']) || empty($formulario['email']) || empty($formulario['contraseña'])) {
             $_SESSION['error'] = 'Algún dato del formulario vacío';
             redirigir('/index.php?action=register');
+            return;
         }
         
         $usuarioMod = new Usuario();
         if ($usuarioMod->encontrarPorEmail($formulario['email'])) {
+            $_SESSION['error'] = "Coreo asignado";
             redirigir('/index.php?action=register');
             return;
         }

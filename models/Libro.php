@@ -7,6 +7,22 @@ class Libro {
     public function __construct() {
         global $conn;
         $this->db = $conn;
-    }    
+    }
+
+    public function mostrarLibros() {
+        try {
+            $result = $this->db->query("SELECT id, titulo, autor FROM libro");
+            if (!$result) {
+                return ['error' => $this->db->error];
+            }
+            return $result->fetch_assoc();
+        } catch (mysqli_sql_exception $e) {
+            return ['error' => $e->getMessage()];
+        }  
+    }
+
+    public function añadirLibro() {}
+
+    public function cambiarLibro() {}
 }
 ?>
