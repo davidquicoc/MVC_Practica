@@ -6,7 +6,11 @@
     <meta name="author" content="David Manuel Quico Cuya">
     <meta name="website" content="Gestión de libros de una biblioteca">
     <title><?php echo $tituloPagina; ?></title>
+    <?php if ($cssFile == 'I') { ?>
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/style.css">
+    <?php } elseif ($cssFile == 'L') { ?>
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/libros.css">
+    <?php } ?>
 </head>
 <body>
     <div class="container">

@@ -33,6 +33,7 @@ class AuthController {
 
         if ($usuario != null && password_verify($contraseña, $usuario['contraseña'])) {
             $_SESSION['user'] = $usuario;
+            $_SESSION['user']['nombre'] = $usuario['nombre'];
             redirigir('/index.php');
         } else {
             $_SESSION['error'] = 'Usuario no encontrado';

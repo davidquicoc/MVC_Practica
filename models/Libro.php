@@ -21,6 +21,14 @@ class Libro {
         }  
     }
 
+    public function encontrarPorId($id) {
+        $result = $this->db->query("SELECT * FROM libro WHERE id = '$id'");
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc();
+        }
+        return null;
+    }
+
     public function añadirLibro() {}
 
     public function cambiarLibro() {}

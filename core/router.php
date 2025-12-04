@@ -24,9 +24,14 @@ switch($action) {
         break;
     //  Libro
     case 'create-libro':
-        (new BookController())->mostrarCrear();
+        (new BookController())->crearLibro();
         break;
-    //  Default
+    case 'edit-libro':
+        (new BookController())->editarLibro();
+        break;
+    case 'erase-libro':
+        (new BookController())->borrarLibro();
+        break;
     default:
         require_once __DIR__ . '/../views/index.php';
         break;
