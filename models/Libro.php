@@ -11,11 +11,11 @@ class Libro {
 
     public function mostrarLibros() {
         try {
-            $result = $this->db->query("SELECT id, titulo, autor FROM libro");
+            $result = $this->db->query("SELECT * FROM libro");
             if (!$result) {
                 return ['error' => $this->db->error];
             }
-            return $result->fetch_assoc();
+            return $result->fetch_all(MYSQLI_ASSOC);
         } catch (mysqli_sql_exception $e) {
             return ['error' => $e->getMessage()];
         }  
@@ -29,8 +29,37 @@ class Libro {
         return null;
     }
 
-    public function añadirLibro() {}
+    public function añadirLibro(array $data) {
+        $titulo = $data['titulo'];
+        $autor = $data['autor'];
+        $editorial = $data['editorial'];
+        $genero = $data['genero'];
+        $año_publicacion = $data['año_publicacion'];
+        $n_paginas = $data['n_paginas'];
 
-    public function cambiarLibro() {}
+        return $this->db->query("INSERT INTO libro (titulo, autor, editorial, genero, año_publicacion, n_paginas) VALUES ('$titulo', '$autor', '$editorial', '$genero', '$año_publicacion', '$n_paginas')");
+    }
+
+    public function modificarLibro(array $data) {
+        $id = $data['id'];
+        $titulo = $data['titulo'];
+        $autor = $data['autor'];
+        $editorial = $data['editorial'];
+        $genero = $data['genero'];
+        $año_publicacion = $data['año_publicacion'];
+        $n_paginas = $data['n_paginas'];
+
+        return $this->db->query("UPDATE libro
+            SET titulo = '$titulo',
+                autor = '$autor',
+                editorial = '$editorial',
+                genero = '$genero',
+                año_publicacion = $año_publicacion,
+                n_paginas = $n_paginas WHERE id = $id");
+    }
+
+    public function eliminarLibro($id) {
+        return $this->db->query("DELETE FROM libro WHERE id = $id");
+    }
 }
 ?>

@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear libro</title>
+    <title>Creación de libros | Biblioteca</title>
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/libro-form.css">
 </head>
 <body>
     <div class="container">
-        <form method="POST" action="<?= BASE_PATH ?>/libros.php?action=add-libro">
+        <form method="POST" action="index.php?action=create-book">
             <h2>Crear nuevo libro</h2>
             <label for="titulo">Titulo:</label>
             <input type="text" name="titulo" id="titulo" required>

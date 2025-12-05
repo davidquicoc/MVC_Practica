@@ -16,13 +16,14 @@
     <div class="container">
         <header class="header">
             <div class="header-logo">
+                <img src="<?= BASE_PATH ?>/assets/images/website/logo_website.png" alt="logo_website">
                 <h2>Biblioteca</h2>
             </div>
             <nav class="header-navbar">
                 <ul>
                     <li><a href="index.php">Inicio</a></li>
                     <?php if (!empty($_SESSION['user'])) { ?>
-                    <li><a href="libros.php">Libros</a></li>
+                    <li><a href="index.php?action=libros">Libros</a></li>
                     <li><a href="prestamos.php">Préstamos</a></li>
                     <?php } ?>
                 </ul>

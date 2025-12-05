@@ -23,13 +23,22 @@ switch($action) {
         (new AuthController())->logout();
         break;
     //  Libro
-    case 'create-libro':
+    case 'libros':
+        (new BookController())->mostrarIndexLibros();
+        break;
+    case 'add-book':
+        (new BookController())->mostrarCrear();
+        break;
+    case 'modify-book':
+        (new BookController())->mostrarEdit();
+        break;
+    case 'create-book':
         (new BookController())->crearLibro();
         break;
-    case 'edit-libro':
+    case 'edit-book':
         (new BookController())->editarLibro();
         break;
-    case 'erase-libro':
+    case 'delete-book':
         (new BookController())->borrarLibro();
         break;
     default:
