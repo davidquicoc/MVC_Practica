@@ -18,12 +18,13 @@
             <input type="text" name="editorial" id="editorial" required>
             <label for="genero">Género:</label>
             <input type="text" name="genero" id="genero" required>
-            <label for="año_publicacion">Año de publicación:</label>
+            <label for="año_publicacion">Año de publicación (máx. <?= date('Y') ?>):</label>
             <input type="number" name="año_publicacion" id="año_publicacion" max="<?= date('Y'); ?>" required>
             <label for="n_paginas">Número de páginas:</label>
             <input type="number" name="n_paginas" id="n_paginas" required>
             <div class="button-block">
-                <input type="submit" value="Acceder">
+                <input type="submit" value="Crear libro">
+                <a href="index.php?action=libros">Volver a libros</a>
             </div>
         </form>
     </div>

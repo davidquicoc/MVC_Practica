@@ -98,11 +98,16 @@ body {
 }
 
 .footer {
-    background: #585858;
+    background: #4d4e5e;
     color: white;
     display: flex;
     padding: 20px;
-    height: 40px;
     align-items: center;
     justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer p {
+    font-size: 1.35rem;
 }

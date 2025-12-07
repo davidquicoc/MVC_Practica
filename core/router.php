@@ -2,6 +2,7 @@
 require_once __DIR__ . '/session.php';
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/BookController.php';
+require_once __DIR__ . '/../controllers/DashboardController.php';
 
 $action = $_GET['action'] ?? null;
 
@@ -42,6 +43,7 @@ switch($action) {
         (new BookController())->borrarLibro();
         break;
     default:
-        require_once __DIR__ . '/../views/index.php';
+        (new DashboardController())->index();
+        //require_once __DIR__ . '/../views/index.php';
         break;
 }

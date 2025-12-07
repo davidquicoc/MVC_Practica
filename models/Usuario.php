@@ -32,8 +32,16 @@ class Usuario {
         $emailU = $data['email'];
         $contraseñaU = password_hash($data['contraseña'], PASSWORD_DEFAULT);
 
-        return $this->db->query("INSERT INTO usuario (dni, nombre, apellido, email, contraseña) VALUES ('$dniU', '$nombreU', '$apellidoU', '$emailU', '$contraseñaU')");
-        
+        return $this->db->query("INSERT INTO usuario (dni, nombre, apellido, email, contraseña) VALUES ('$dniU', '$nombreU', '$apellidoU', '$emailU', '$contraseñaU')");   
+    }
+
+    public function contarUsuarios() {
+        $result = $this->db->query("SELECT COUNT(*) as total FROM usuario");
+        if ($result) {
+            $fila = $result->fetch_assoc();
+            return $fila['total'];
+        }
+        return 0;
     }
 }
 ?>

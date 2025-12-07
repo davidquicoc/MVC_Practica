@@ -19,6 +19,10 @@ class BookController {
 
     public function mostrarEdit() {
         require_login();
+        if (!isset($_POST['id'])) {
+            $_SESSION['libro-error'] = "Error al intentar editar un libro";
+            redirigir('/index.php?action=libros');
+        }
         require __DIR__ . '/../views/libros/edit.php';
     }
 
@@ -34,9 +38,9 @@ class BookController {
 
         $libroMod = new Libro();
         if ($libroMod->añadirLibro($formulario)) {
-            $_SESSION['libro-mensaje'] = "Libro creado correctamente";
+            $_SESSION['libro-mensaje'] = "Libro creado correctamente.";
         } else {
-            $_SESSION['libro-error'] = 'Creación de libro fallado';
+            $_SESSION['libro-error'] = "Creación de libro fallado.";
         }
         redirigir('/index.php?action=libros');
     }
@@ -54,9 +58,9 @@ class BookController {
 
         $libroMod = new Libro();
         if ($libroMod->modificarLibro($formulario)) {
-            $_SESSION['libro-mensaje'] = "Libro modificado";
+            $_SESSION['libro-mensaje'] = "Libro modificado correctamente.";
         } else {
-            $_SESSION['libro-error'] = "Fallido la operación de editar libro";
+            $_SESSION['libro-error'] = "Fallido la operación de editar libro.";
         }
         redirigir('/index.php?action=libros');
     }
@@ -65,9 +69,9 @@ class BookController {
         $id = $_POST['id'] ?? '';
         $libroMod = new Libro();
         if ($libroMod->eliminarLibro($id)) {
-            $_SESSION['libro-mensaje'] = "Libro creado correctamente";
+            $_SESSION['libro-mensaje'] = "Libro borrado correctamente.";
         } else {
-            $_SESSION['libro-error'] = "Libro no eliminado";
+            $_SESSION['libro-error'] = "Libro no eliminado.";
         }
         redirigir('/index.php?action=libros');
     }

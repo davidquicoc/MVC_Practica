@@ -1,31 +1,39 @@
 <?php
 $tituloPagina = "Libros | Biblioteca";
 $cssFile = "L";
-$booleanLibros = true;
 include __DIR__ . '/../layout/header.php';
 ?>
 <?php
+$libro_mensaje = $_SESSION['libro-mensaje'] ?? '';
+$libro_error = $_SESSION['libro-error'] ?? '';
+
+unset($_SESSION['libro-mensaje']);
+unset($_SESSION['libro-error']);
+
 if (isset($libros['error'])) {
     echo "<p class='libros-error-text'>Error al acceder a la base de datos:" . $libros['error'] . "</p>";
     include __DIR__ . '/../layout/footer.php';
     exit();
 }
 
-if (empty($libros) && !isset($libros['error'])) {
-    echo "<p>No hay libros en la base de datos.</p>";
-    $booleanLibros = false;
+$hayLibros = !empty($libros);
+
+if (isset($_SESSION['libro-mensaje'])) {
+    echo "<p class='mensaje correcto'>" . $_SESSION['libro-mensaje'] . "</p>";
 }
+
 ?>
 <section class="section-libros">
     <div class="mensajes-libros">
         <?php
-            if (isset($_SESSION['libro-mensaje'])) {
-                echo "<p class='mensaje-correcto'>" . $_SESSION['libro-mensaje'] .  "</p>";
-            } elseif (isset($_SESSION['libro-error'])) {
-                echo "<p class='mensaje-erroneo'>" . $_SESSION['libro-error'] .  "</p>";
+            if (!empty($libro_mensaje)) {
+                echo "<p class='mensaje correcto'>$libro_mensaje</p>";
+            } elseif (!empty($libro_error)) {
+                echo "<p class='mensaje error'>$libro_error</p>";
             }
         ?>
     </div>
+
     <div class="list-libros">
         <h2>Listado de libros</h2>
         <table>
@@ -54,9 +62,9 @@ if (empty($libros) && !isset($libros['error'])) {
                     </th>
                 </tr>
             </thead>
+            <tbody>
             <?php
-                if ($booleanLibros) {
-                    echo "<tbody>";
+                if ($hayLibros) {
                     foreach($libros as $libro) {
                         echo "<tr>";
                             echo "<td> " . $libro['titulo'] . "</td>";
@@ -84,12 +92,18 @@ if (empty($libros) && !isset($libros['error'])) {
                             echo "</td>";
                         echo "</tr>";
                     }
-                    echo "</tbody>";
+                } else {
+                        echo "<tr>
+                            <td colspan='7' class='error-bd'>
+                                No hay libros en la base de datos
+                            </td>
+                        </tr>";
                 }
             ?>
+            </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">Biblioteca &copy;&nbsp;<?= date('Y'); ?></td>
+                    <td colspan="7">Biblioteca&nbsp;&copy;&nbsp;<?= date('Y'); ?></td>
                 </tr>
             </tfoot>
         </table>

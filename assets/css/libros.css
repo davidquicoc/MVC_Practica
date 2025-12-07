@@ -124,6 +124,33 @@ body {
     gap: 20px;
 }
 
+.mensajes-libros {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+.mensaje {
+    padding: 15px 20px;
+    border-radius: 13.5px;
+    font-size: 1.53rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.mensaje.correcto {
+    background: #4ba87d;
+    color: #ffffff;
+    border: 1px solid #3a8563;
+}
+
+.mensaje.error {
+    background: #df5553;
+    color: #ffffff;
+    border: 1px solid #c93a38;
+}
+
 .list-libros {
     display: flex;
     width: 100%;
@@ -169,12 +196,19 @@ th, td {
 }
 
 td {
-    border-right: 1px solid black;
+    border-right: 1px solid #000000;
     font-size: 1.24rem;
 }
 
 td:last-child {
     border-right: none;
+}
+
+.error-bd {
+    background: #df5553;
+    color: #ffffff;
+    border: none;
+    font-size: 1.42rem;
 }
 
 tfoot {
@@ -223,20 +257,34 @@ tfoot {
 
 .link-create a {
     border: 1px solid #00000000;
+    color: #ffffff;
     padding: 10px 15px;
     text-transform: uppercase;
     text-decoration: none;
     font-size: 1.6rem;
-    background-color: #292a3148;
+    background: #292a3148;
     border-radius: 25px;
+    transition: 0.4s;
+}
+
+.link-create a:hover {
+    border: 1.2px solid #5f5d67;
+    background: #9598ae;
+    color: #212121;
+    border-radius: 10px;
 }
 
 .footer {
-    background: #585858;
+    background: #4d4e5e;
     color: white;
     display: flex;
     padding: 20px;
-    height: 40px;
     align-items: center;
     justify-content: space-around;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer p {
+    font-size: 1.35rem;
 }
