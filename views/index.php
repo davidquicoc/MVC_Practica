@@ -15,7 +15,7 @@ $contLibrosDisponible = 0;
             </div>
             <div>
                 <h3>Total de préstamos existentes</h3>
-                <p>&nbsp;</p>
+                <p><?= $totalPrestamosExistentes['total']; ?></p>
             </div>
         </div>
         <div class="right-stats">
@@ -30,6 +30,13 @@ $contLibrosDisponible = 0;
             <div>
                 <h3>Libros no disponibles</h3>
                 <p><?= $totalLibrosNoDisponibles; ?></p>
+            </div>
+        </div>
+        <div class="prestamo-stats">
+            <div>
+                <h3>Preśtamos del usuario <?= $_SESSION['user']['nombre']; ?></h3>
+                <p><!--MOSTRAR PRESTAMOS CON TITULO DE LIBRO Y FECHA--></p>
+                <p><!--MOSTRAR MULTAS SI PASO EL LIMITE DE DIAS--></p>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/../models/Libro.php';
 require_once __DIR__ . '/../models/Usuario.php';
+require_once __DIR__ . '/../models/Prestamo.php';
 
 class DashboardController {
     public function index() {
@@ -13,6 +14,7 @@ class DashboardController {
         $totalLibrosDisponibles = (new Libro())->contarLibros();
         $totalLibrosDisponibles = (new Libro())->contarLibrosDisponibles();
         $totalLibrosNoDisponibles = (new Libro())->contarLibrosNoDisponibles();
+        $totalPrestamosExistentes = (new Prestamo())->totalDePrestamosExistentes();
         require __DIR__ . '/../views/index.php';
     }
 }

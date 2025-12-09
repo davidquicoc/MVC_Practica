@@ -2,12 +2,25 @@
 $tituloPagina = "Préstamos | Biblioteca";
 $cssFile = "P";
 include __DIR__ . '/../layout/header.php';
+
+$prestamo_error = $_SESSION['prestamo-error'] ?? '';
+$prestamo_mensaje = $_SESSION['prestamo-mensaje'] ?? '';
+
+$hayLibrosPrestados = !empty($librosPrestados);
+
+unset($_SESSION['prestamo-error']);
+unset($_SESSION['prestamo-mensaje']);
 ?>
 <!--SEGUIR MÁS ADELANTE :D-->
 <section>
-    <?php if ($librosPrestados) { ?>
+    <?php if ($hayLibrosPrestados) { ?>
     <div class="user-data">
-        <h2>Libros prestados por el usuario</h2>
+        <h2>Libros prestados por el usuario '<?= $_SESSION['user']['nombre']; ?>'</h2>
+        <ul>
+        <?php foreach($librosPrestados as $libroPrestado) { ?>
+            <li><?= $libroPrestado['titulo']; ?></li>
+        <?php } ?>
+        </ul>
     </div>
     <?php } ?>
     <div class="form">
@@ -70,11 +83,28 @@ include __DIR__ . '/../layout/header.php';
             </form>
         </table>
     </div>
+    <?php if ($hayLibrosPrestados) { ?>
     <div class="prestamos-actuales">
         <?php foreach($prestamos as $prestamo) { ?>
-        <div></div>
+        <div>
+            <h3>Nº préstamo <?= $prestamo['prestamo_id']; ?>.</h3>
+            <p>Préstamo perteneciente a usuario <span>"<?= $prestamo['nombre_usuario']; ?>"</span></p>
+            <p>Título del libro: <span><?= $prestamo['titulo_libro']; ?></span></p>
+            <p>Fecha de préstamo: <span><?= $prestamo['fecha_prestamo']; ?></span></p>
+            <p>Fecha de devolución: <span><?= $prestamo['fecha_devolucion']; ?></span></p>
+            <p>Multa: <span><?= $prestamo['multa']; ?></span></p>
+            <form method="POST" action="index.php?action=devolver-libro">
+                <input type="hidden" name="usuario_id" value="">
+                <input type="hidden" name="libro_id" value="">
+                <input type="hidden" name="fecha_prestamo" value="">
+                <input type="hidden" name="fecha_devolucion" value="">
+                <input type="hidden" name="multa" value="">
+                <input type="submit" value="Devolver libro">
+            </form>
+        </div>
         <?php } ?>
     </div>
+    <?php } ?>
 </section>
 <?php
 include __DIR__ . '/../layout/footer.php';

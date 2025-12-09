@@ -92,5 +92,16 @@ class Libro {
     public function obtenerLibrosDisponibles() {
         return $this->db->query("SELECT id, titulo FROM libro WHERE disponibilidad = 1");
     }
+
+    public function obtenerLibrosDeUnUsuario($id) {
+        $result = $this->db->query("SELECT libro.id, libro.titulo
+                                FROM libro
+                                INNER JOIN prestamo ON libro.id = prestamo.libro_id
+                                WHERE prestamo.usuario_id = $id");
+        if($result) {
+            return $result->fetch_all(MYSQLI_ASSOC);
+        }
+        return 0;
+    }
 }
 ?>

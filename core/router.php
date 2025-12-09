@@ -50,7 +50,7 @@ switch($action) {
     case 'sacar-libro':
         (new PrestamoController())->sacarLibro();
         break;
-    case 'devolver':
+    case 'devolver-libro':
         (new PrestamoController())->devolverLibro();
         break;
     //  Index por defecto

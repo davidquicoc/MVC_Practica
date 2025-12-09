@@ -1,6 +1,5 @@
 <?php
     require_once __DIR__ . '/../core/session.php';
-    require_once __DIR__ . '/../controllers/PrestamoController.php';
     require_once __DIR__ . '/../models/Usuario.php';
     require_once __DIR__ . '/../models/Libro.php';
     require_once __DIR__ . '/../models/Prestamo.php';
@@ -11,6 +10,9 @@
 
             $librosDisponibles = (new Libro())->obtenerLibrosDisponibles();
             $usuariosActuales = (new Usuario())->obtenerTodosLosUsuarios();
+            $librosPrestados = (new Libro())->obtenerLibrosDeUnUsuario($_SESSION['user']['id']);
+
+            $prestamos = (new Prestamo())->listarPrestamos();
             require __DIR__ . '/../views/prestamos/index.php';
         }
 
@@ -28,13 +30,26 @@
             $esDisponible = false;
 
             foreach ($comprobacionLibro as $comprobacion) {
-                if ($comprobacion['libro_id'])
+                if ($comprobacion['id'] === $formulario['libro_id']) {
+                    $esDisponible = true;
+                    break;
+                }
+            }
+
+            if (!$esDisponible) {
+                $_SESSION['prestamo-error'] = "Libro no encontrado o libro no disponible";
+                redirigir('/index.php?action=prestamos');
+            } else {
+                $libroMod->
             }
 
             $prestamoMod = new Prestamo();
-            if ($prestamoMod()->sacar($formulario)) {
-
+            if ($prestamoMod->sacarLibro($formulario)) {
+                $_SESSION['prestamo-mensaje'] = "Préstamo añadido correctamente";
+            } else {
+                $_SESSION['prestamo-error'] = "Error al añadir préstamo";
             }
+            redirigir('/index.php?action=prestamos');
         }
 
         public function devolverLibro() {}
