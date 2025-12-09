@@ -88,7 +88,8 @@ if (isset($_SESSION['libro-mensaje'])) {
                                         </form>
                                         <form method='POST' action='index.php?action=delete-book'>
                                             <input type='hidden' name='id' value='" . $libro['id'] . "'>
-                                            <input type='submit' value='Borrar'>";
+                                            <input type='submit' value='Borrar'>
+                                        </form>";
                             echo "</td>";
                         echo "</tr>";
                     }

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/style.css">
     <?php } elseif ($cssFile == 'L') { ?>
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/libros.css">
+    <?php } elseif ($cssFile == 'P') { ?>
+    <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/prestamos.css">
     <?php } ?>
 </head>
 <body>
@@ -24,7 +26,7 @@
                     <li><a href="index.php">Inicio</a></li>
                     <?php if (!empty($_SESSION['user'])) { ?>
                     <li><a href="index.php?action=libros">Libros</a></li>
-                    <li><a href="prestamos.php">Préstamos</a></li>
+                    <li><a href="index.php?action=prestamos">Préstamos</a></li>
                     <?php } ?>
                 </ul>
             </nav>

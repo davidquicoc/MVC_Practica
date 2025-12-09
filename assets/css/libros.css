@@ -24,7 +24,7 @@ body {
     background: #4d4e5e;
     height: 80px;
     padding: 15px;
-    width: 100vw;
+    width: 100%;
     display: flex;
     align-items: center;
 }
@@ -47,7 +47,7 @@ body {
 
 .header-logo h2 {
     font-size: 2.65rem;
-    color: white;
+    color: #ffffff;
     text-transform: uppercase;
 }
 
@@ -68,7 +68,7 @@ body {
 
 .header-navbar ul li a {
     font-size: 1.6992rem;
-    color: white;
+    color: #ffffff;
 }
 
 .header-navbar ul li a:hover {
@@ -81,7 +81,7 @@ body {
 
 .header-user p {
     font-size: 1.6992rem;
-    color: white;
+    color: #ffffff;
 }
 
 .header-user p a {
@@ -102,9 +102,8 @@ body {
     width: 100%;
 }
 
-/* Libros */
 .libros-error-text {
-    color: red;
+    color: #ff0000;
 }
 
 .libros-create {
@@ -157,7 +156,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    background-color: #00000011;
+    background: #00000011;
     border-radius: 15px;
     padding: 15px;
 }
@@ -182,10 +181,6 @@ thead {
     border-collapse: collapse;
 }
 
-tbody {
-    background: #70acb1;
-}
-
 th {
     font-size: 1.4rem;
 }
@@ -197,11 +192,25 @@ th, td {
 
 td {
     border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
     font-size: 1.24rem;
 }
 
-td:last-child {
+tbody td:nth-child(even) {
+    background: #70acb1;
+}
+
+tbody td:nth-child(odd) {
+    background: #9bcfd3;
+}
+
+tbody tr td:last-child {
     border-right: none;
+    background: #b4d0da;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
 }
 
 .error-bd {
@@ -212,12 +221,15 @@ td:last-child {
 }
 
 tfoot {
-    background: #242427;
     color: #ffffff9c;
     font-size: 1.24rem;
     font-weight: 100;
     padding: 0;
     text-transform: uppercase;
+}
+
+tfoot tr td {
+    background: #242427;
 }
 
 .button-libro {
@@ -246,7 +258,7 @@ tfoot {
 }
 
 .link-create {
-    background-color: #00000011;
+    background: #00000011;
     width: 100%;
     border-radius: 15px;
     display: flex;
@@ -279,6 +291,7 @@ tfoot {
     color: white;
     display: flex;
     padding: 20px;
+    width: 100%;
     align-items: center;
     justify-content: space-around;
     align-items: center;

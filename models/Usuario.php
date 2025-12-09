@@ -43,5 +43,9 @@ class Usuario {
         }
         return 0;
     }
+
+    public function obtenerTodosLosUsuarios() {
+        return $this->db->query("SELECT id, nombre FROM usuario");
+    }
 }
 ?>

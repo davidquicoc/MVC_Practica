@@ -10,7 +10,9 @@ class DashboardController {
 
         $totalLibros = (new Libro())->contarLibros();        
         $totalUsuarios = (new Usuario())->contarUsuarios();
-
+        $totalLibrosDisponibles = (new Libro())->contarLibros();
+        $totalLibrosDisponibles = (new Libro())->contarLibrosDisponibles();
+        $totalLibrosNoDisponibles = (new Libro())->contarLibrosNoDisponibles();
         require __DIR__ . '/../views/index.php';
     }
 }
