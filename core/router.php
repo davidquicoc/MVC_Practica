@@ -47,9 +47,6 @@ switch($action) {
     case 'prestamos':
         (new PrestamoController())->mostrarIndexPrestamos();
         break;
-    case 'sacar':
-        (new PrestamoController())->mostrarSacarLibro();
-        break;
     case 'sacar-libro':
         (new PrestamoController())->sacarLibro();
         break;
