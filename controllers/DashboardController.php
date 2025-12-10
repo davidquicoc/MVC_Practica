@@ -15,6 +15,10 @@ class DashboardController {
         $totalLibrosDisponibles = (new Libro())->contarLibrosDisponibles();
         $totalLibrosNoDisponibles = (new Libro())->contarLibrosNoDisponibles();
         $totalPrestamosExistentes = (new Prestamo())->totalDePrestamosExistentes();
+        $prestamosUsuario = [];
+        if (!empty($_SESSION['user'])) {
+            $prestamosUsuario = (new Prestamo())->obtenerPrestamosPorUsuario($_SESSION['user']['id']);
+        }
         require __DIR__ . '/../views/index.php';
     }
 }

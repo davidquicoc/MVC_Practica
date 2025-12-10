@@ -93,7 +93,7 @@ class Libro {
         return $this->db->query("SELECT id, titulo FROM libro WHERE disponibilidad = 1");
     }
 
-    public function obtenerLibrosDeUnUsuario($id) {
+    /*public function obtenerPrestamosDeUnUsuario($id) {
         $result = $this->db->query("SELECT libro.id, libro.titulo
                                 FROM libro
                                 INNER JOIN prestamo ON libro.id = prestamo.libro_id
@@ -101,7 +101,12 @@ class Libro {
         if($result) {
             return $result->fetch_all(MYSQLI_ASSOC);
         }
-        return 0;
+        return null;
+    }*/
+
+    public function actualizarDisponibilidad($id, $estado) {
+        $estado = (int) $estado;
+        return $this->db->query("UPDATE libro SET disponibilidad = $estado WHERE id = $id");
     }
 }
 ?>

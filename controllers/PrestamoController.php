@@ -10,7 +10,8 @@
 
             $librosDisponibles = (new Libro())->obtenerLibrosDisponibles();
             $usuariosActuales = (new Usuario())->obtenerTodosLosUsuarios();
-            $librosPrestados = (new Libro())->obtenerLibrosDeUnUsuario($_SESSION['user']['id']);
+
+            $librosPrestados = (new Prestamo())->obtenerPrestamosPorUsuario($_SESSION['user']['id']);
 
             $prestamos = (new Prestamo())->listarPrestamos();
             require __DIR__ . '/../views/prestamos/index.php';
@@ -22,10 +23,11 @@
                 'libro_id' => $_POST['libro_id'] ?? '',
                 'fecha_prestamo' => $_POST['fecha_prestamo'] ?? '',
                 'fecha_devolucion' => $_POST['fecha_devolucion'] ?? '',
-                'multa' => $_POST['multa'] 
+                'multa' => $_POST['multa'] ?? 0
             ];
 
             $libroMod = new Libro();
+            
             $comprobacionLibro = $libroMod->obtenerLibrosDisponibles();
             $esDisponible = false;
 
@@ -39,12 +41,13 @@
             if (!$esDisponible) {
                 $_SESSION['prestamo-error'] = "Libro no encontrado o libro no disponible";
                 redirigir('/index.php?action=prestamos');
-            } else {
-                $libroMod->
+                return;
             }
 
             $prestamoMod = new Prestamo();
+            
             if ($prestamoMod->sacarLibro($formulario)) {
+                $libroMod->actualizarDisponibilidad($formulario['libro_id'], 0);
                 $_SESSION['prestamo-mensaje'] = "Préstamo añadido correctamente";
             } else {
                 $_SESSION['prestamo-error'] = "Error al añadir préstamo";

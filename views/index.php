@@ -32,6 +32,7 @@ $contLibrosDisponible = 0;
                 <p><?= $totalLibrosNoDisponibles; ?></p>
             </div>
         </div>
+        <?php if (isset($_SESSION['user'])) { ?>
         <div class="prestamo-stats">
             <div>
                 <h3>Preśtamos del usuario <?= $_SESSION['user']['nombre']; ?></h3>
@@ -39,6 +40,7 @@ $contLibrosDisponible = 0;
                 <p><!--MOSTRAR MULTAS SI PASO EL LIMITE DE DIAS--></p>
             </div>
         </div>
+        <?php } ?>
     </div>
     <?php if (empty($_SESSION['user'])) {?>
     <div class="login-div">
