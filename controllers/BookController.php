@@ -3,20 +3,22 @@ require_once __DIR__ . '/../core/session.php';
 require_once __DIR__ . '/../models/Libro.php';
 
 class BookController {
+
+    //  Función que muestra el view index de views/libros
     public function mostrarIndexLibros() {
         require_login();
 
-        $libroModel = new Libro();
-        $libros = $libroModel->mostrarLibros();
-
+        $listaLibros = (new Libro())->mostrarLibros();
         require __DIR__ . '/../views/libros/index.php';
     }
 
+    //  Función que muestra el view create de views/libros
     public function mostrarCrear() {
         require_login();
         require __DIR__ . '/../views/libros/create.php';
     }
 
+    //  Función que muestra el view edit de views/libros
     public function mostrarEdit() {
         require_login();
         if (!isset($_POST['id'])) {
@@ -26,6 +28,7 @@ class BookController {
         require __DIR__ . '/../views/libros/edit.php';
     }
 
+    //  Función que recoge los datos del formulario views/libros/create
     public function crearLibro() {
         $formulario = [
             'titulo' => $_POST['titulo'] ?? '',
@@ -45,6 +48,7 @@ class BookController {
         redirigir('/index.php?action=libros');
     }
 
+    //  Función que recoge los datos del formulario views/libros/edit
     public function editarLibro() {
         $formulario = [
             'id' => $_POST['id'] ?? '',
@@ -65,6 +69,7 @@ class BookController {
         redirigir('/index.php?action=libros');
     }
 
+    //  Función que recoge los datos del formulario views/libros/index
     public function borrarLibro() {
         $id = $_POST['id'] ?? '';
         $libroMod = new Libro();

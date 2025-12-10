@@ -4,6 +4,7 @@ require_once __DIR__ . '/../models/Usuario.php';
 
 class AuthController {
     
+    //  Función que muestra el view/auth/login.php
     public function mostrarLogin() {
         if (!empty($_SESSION['user'])) {
             redirigir('/index.php');
@@ -11,6 +12,7 @@ class AuthController {
         require __DIR__ . '/../views/auth/login.php';
     }
 
+    //  Función que muestra el view/auth/register.php
     public function mostrarRegister() {
         if (!empty($_SESSION['user'])) {
             redirigir('/index.php');
@@ -18,6 +20,7 @@ class AuthController {
         require __DIR__ . '/../views/auth/register.php';
     }
 
+    //  Función que hará comprobaciones y hara login en $_SESSION con los datos del formulario de login
     public function hacerLogin() {
         $email = $_POST['email'] ?? '';
         $contraseña = $_POST['contraseña'] ?? '';
@@ -41,6 +44,7 @@ class AuthController {
         }
     }
 
+    //  Función que hará comprobaciones y creará un usuario en la base de datos con los datos del formulario de register
     public function hacerRegister() {
         $formulario = [
             'dni' => $_POST['dni'] ?? '',

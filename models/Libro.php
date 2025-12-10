@@ -9,6 +9,7 @@ class Libro {
         $this->db = $conn;
     }
 
+    //  Función que muestra todos los libros en un array asociativo
     public function mostrarLibros() {
         try {
             $result = $this->db->query("SELECT * FROM libro");
@@ -21,14 +22,7 @@ class Libro {
         }
     }
 
-    public function encontrarPorId($id) {
-        $result = $this->db->query("SELECT * FROM libro WHERE id = '$id'");
-        if ($result->num_rows > 0) {
-            return $result->fetch_assoc();
-        }
-        return null;
-    }
-
+    //  Función que añadirá un libro a la base de datos
     public function añadirLibro(array $data) {
         $titulo = $data['titulo'];
         $autor = $data['autor'];
@@ -40,6 +34,7 @@ class Libro {
         return $this->db->query("INSERT INTO libro (titulo, autor, editorial, genero, año_publicacion, n_paginas) VALUES ('$titulo', '$autor', '$editorial', '$genero', '$año_publicacion', '$n_paginas')");
     }
 
+    //  Función que modificará un libro de la base de datos
     public function modificarLibro(array $data) {
         $id = $data['id'];
         $titulo = $data['titulo'];
@@ -58,10 +53,12 @@ class Libro {
                 n_paginas = '$n_paginas' WHERE id = '$id'");
     }
 
+    //  Función que eliminará un libro de la base de datos
     public function eliminarLibro($id) {
         return $this->db->query("DELETE FROM libro WHERE id = '$id'");
     }
 
+    //  Función que cuenta el total de libros existentes en la base de datos
     public function contarLibros() {
         $result = $this->db->query("SELECT COUNT(*) as total FROM libro");
         if ($result) {
@@ -71,6 +68,7 @@ class Libro {
         return 0;
     }
 
+    //  Función que cuenta el total de libros disponibles
     public function contarLibrosDisponibles() {
         $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = 1");
         if ($result) {
@@ -80,6 +78,7 @@ class Libro {
         return 0;
     }
 
+    //  Función que cuenta el total de libros no disponibles
     public function contarLibrosNoDisponibles() {
         $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = 0");
         if ($result) {
@@ -89,21 +88,12 @@ class Libro {
         return 0;
     }
 
+    //  Función que obtiene el id y titulo de los libros con disponibilidad
     public function obtenerLibrosDisponibles() {
         return $this->db->query("SELECT id, titulo FROM libro WHERE disponibilidad = 1");
     }
 
-    /*public function obtenerPrestamosDeUnUsuario($id) {
-        $result = $this->db->query("SELECT libro.id, libro.titulo
-                                FROM libro
-                                INNER JOIN prestamo ON libro.id = prestamo.libro_id
-                                WHERE prestamo.usuario_id = $id");
-        if($result) {
-            return $result->fetch_all(MYSQLI_ASSOC);
-        }
-        return null;
-    }*/
-
+    //  Función que actualiza la disponibilidad de un libro
     public function actualizarDisponibilidad($id, $estado) {
         $estado = (int) $estado;
         return $this->db->query("UPDATE libro SET disponibilidad = $estado WHERE id = $id");

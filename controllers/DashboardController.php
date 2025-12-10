@@ -9,15 +9,16 @@ class DashboardController {
             session_start();
         }
 
-        $totalLibros = (new Libro())->contarLibros();        
-        $totalUsuarios = (new Usuario())->contarUsuarios();
-        $totalLibrosDisponibles = (new Libro())->contarLibros();
+        $totalLibrosExistentes = (new Libro())->contarLibros();        
+        $totalUsuariosExistentes = (new Usuario())->contarUsuarios();
+        $totalPrestamosExistentes = (new Prestamo())->contarPrestamos();
+
         $totalLibrosDisponibles = (new Libro())->contarLibrosDisponibles();
         $totalLibrosNoDisponibles = (new Libro())->contarLibrosNoDisponibles();
-        $totalPrestamosExistentes = (new Prestamo())->totalDePrestamosExistentes();
-        $prestamosUsuario = [];
-        if (!empty($_SESSION['user'])) {
-            $prestamosUsuario = (new Prestamo())->obtenerPrestamosPorUsuario($_SESSION['user']['id']);
+        
+        $prestamosDelUsuario = [];
+        if (isset($_SESSION['user'])) {
+            $prestamosDelUsuario = (new Prestamo())->obtenerPrestamosPorUsuario($_SESSION['user']['id']);
         }
         require __DIR__ . '/../views/index.php';
     }

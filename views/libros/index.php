@@ -10,16 +10,13 @@ $libro_error = $_SESSION['libro-error'] ?? '';
 unset($_SESSION['libro-mensaje']);
 unset($_SESSION['libro-error']);
 
+$libros = $listaLibros ?? [];
+$hayLibros = !empty($libros);
+
 if (isset($libros['error'])) {
     echo "<p class='libros-error-text'>Error al acceder a la base de datos:" . $libros['error'] . "</p>";
     include __DIR__ . '/../layout/footer.php';
     exit();
-}
-
-$hayLibros = !empty($libros);
-
-if (isset($_SESSION['libro-mensaje'])) {
-    echo "<p class='mensaje correcto'>" . $_SESSION['libro-mensaje'] . "</p>";
 }
 
 ?>
