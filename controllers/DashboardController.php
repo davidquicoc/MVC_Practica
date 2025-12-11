@@ -9,6 +9,8 @@ class DashboardController {
             session_start();
         }
 
+        $listaDeLibros = (new Libro())->mostrarLibros();
+
         $totalLibrosExistentes = (new Libro())->contarLibros();        
         $totalUsuariosExistentes = (new Usuario())->contarUsuarios();
         $totalPrestamosExistentes = (new Prestamo())->contarPrestamos();

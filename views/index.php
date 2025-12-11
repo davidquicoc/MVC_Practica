@@ -4,6 +4,8 @@ $tituloPagina = "Inicio | Biblioteca";
 $cssFile = "I";
 include __DIR__ . '/layout/header.php';
 
+$listadoLibros = $listaDeLibros ?? [];
+
 $totalUsuarios = $totalUsuariosExistentes ?? 0;
 $totalLibros = $totalLibrosExistentes ?? 0;
 $totalPrestamos = $totalPrestamosExistentes ?? 0;
@@ -39,24 +41,33 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
                 <p><?= $numLibrosNoDisp; ?></p>
             </div>
         </div>
-        <?php if (isset($_SESSION['user'])) { ?>
+        <div class="libros-stats">
+            <h3>Disponibildad de libros</h3>
+            <?php if (isset($libros['error'])) { ?>
+            <p class="error">Error al acceder a la base de datos:" <?= $libros['error']; ?> </p>
+            <?php } ?>
+            <?php foreach($listadoLibros as $libros) { ?>
+            <ul>
+                <li class="lista-libros <?= ($libros['disponibilidad']) ? "disponible" : "no-disponible" ?>"><?= $libros['titulo'] ?></li>
+            </ul>
+            <?php } ?>
+        </div>
+        <?php if (isset($_SESSION['user']) && !empty($usuarioPrestamos)) { ?>
         <div class="prestamo-stats">
             <h3>Preśtamos del usuario <?= $_SESSION['user']['nombre']; ?></h3>
-                <?php if (!empty($usuarioPrestamos)) {
-                        foreach($usuarioPrestamos as $prestamos) {
-                            $tieneMulta = ($prestamos['fecha_devolucion'] > date('Y-m-d')) ? true : false; 
+                <?php
+                    foreach($usuarioPrestamos as $prestamos) {
+                        $tieneMulta = date('Y-m-d') > $prestamos['fecha_devolucion']; 
                 ?>
                 <div class="prestamo-data <?= ($tieneMulta) ? "multa" : "sin_multa"; ?>">
-                    <p><?= $prestamos['titulo']; ?></p>
-                    <p><?= $prestamos['fecha_devolucion']; ?></p>
+                    <p>Libro: <span><?= $prestamos['titulo']; ?></span></p>
+                    <p>Fecha de préstamo: <span><?= $prestamos['fecha_prestamo']; ?></span></p>
+                    <p>Fecha de devolución: <span><?= $prestamos['fecha_devolucion']; ?></span></p>
                     <?php if ($tieneMulta) { ?>
-                    <p>Multa a pagar: <?= $prestamos['multa']; ?></p>
-                    <?php } else { ?>
-                    <li>Multa: <?= $prestamos['multa']; ?></li>
+                    <p>Multa a pagar: <span><?= $prestamos['multa']; ?></span></p>
                     <?php } ?>
                 </div>
                 <?php } ?>
-            <?php } ?>
         </div>
         <?php } ?>
     </div>

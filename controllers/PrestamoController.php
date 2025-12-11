@@ -46,7 +46,7 @@
 
             $prestamoMod = new Prestamo();
             
-            if ($prestamoMod->sacarLibro($formulario)) {
+            if ($prestamoMod->sacar($formulario)) {
                 $libroMod->actualizarDisponibilidad($formulario['libro_id'], 0);
                 $_SESSION['prestamo-mensaje'] = "Préstamo añadido correctamente";
             } else {
@@ -55,6 +55,36 @@
             redirigir('/index.php?action=prestamos');
         }
 
-        public function devolverLibro() {}
+        public function devolverLibro() {
+            $prestamo_id = $_POST['prestamo_id'] ?? '';
+            $libro_id = $_POST['libro_id'] ?? '';
+
+            $libroMod = new Libro();
+
+            $comprobacionLibro = $libroMod->obtenerLibrosDisponibles();
+            $noEsDisponible = false;
+            foreach ($comprobacionLibro as $comprobacion) {
+                if ($comprobacion['id'] !== $libro_id) {
+                    $noEsDisponible = true;
+                    break;
+                }
+            }
+
+            if (!$noEsDisponible) {
+                $_SESSION['prestamo-error'] = "Libro no encontrado o libro que cuenta con disponibilidad";
+                redirigir('/index.php?action=prestamos');
+                return;
+            }
+
+            $prestamoMod = new Prestamo();
+
+            if ($prestamoMod->devolver($prestamo_id)) {
+                $libroMod->actualizarDisponibilidad($libro_id, 1);
+                $_SESSION['prestamo-mensaje'] = "Libro devuelto correctamente";
+            } else {
+                $_SESSION['prestamo-error'] = "Error al devolver libro";
+            }
+            redirigir('/index.php?action=prestamos');
+        }
     }
 ?>

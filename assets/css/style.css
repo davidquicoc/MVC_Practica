@@ -105,7 +105,16 @@ section {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+}
+
+section h3 {
+    font-size: 1.74rem;
+    margin: 5px 0;
+}
+
+section p {
+    font-size: 1.4rem;
+    margin: 2.5px 0;
 }
 
 .stats {
@@ -114,20 +123,11 @@ section {
     justify-content: space-around;
     align-items: center;
     padding: 20px;
-    gap: 13.5px;
+    flex-wrap: wrap;
+    gap: 20px;
     background: #00000011;
     border-radius: 15px;
     text-align: center;
-}
-
-.stats h3 {
-    font-size: 1.74rem;
-    margin: 5px 0;
-}
-
-.stats p {
-    font-size: 1.4rem;
-    margin: 2.5px 0;
 }
 
 .left-stats,
@@ -136,7 +136,7 @@ section {
     display: flex;
     border-radius: 15px;
     gap: 20px;
-    width: calc((100% / 2) - 75px);
+    width: calc((100% / 2) - 25px);
     padding: 15px;
     align-items: center;
     justify-content: center;
@@ -149,6 +149,77 @@ section {
     margin: 5px 0;
     width: auto;
     height: auto;
+}
+
+.libros-stats {
+    width: 100%;
+    padding: 15px;
+    border-radius: 15px;
+    background: #00000022;
+}
+
+.libros-stats ul {
+    list-style: none;
+    display: inline-block;
+}
+
+.lista-libros {
+    margin: 10px 20px;
+    font-size: 1.3312rem;
+    text-align: center;
+    text-decoration: underline;
+    text-decoration-thickness: 2.41px;
+}
+
+.disponible {
+    text-decoration-color: #296f38;
+}
+
+.no-disponible {
+    text-decoration-color: #a03131;
+}
+
+.prestamo-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 15px;
+    width: 100%;
+    border-radius: 15px;
+    background: #00000022;
+}
+
+.prestamo-stats h3 {
+    width: 100%;
+}
+
+.prestamo-data {
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.prestamo-data span {
+    font-weight: 600;
+}
+
+.multa {
+    background: #ff000022;
+    border: 1px solid #ec4242;
+}
+
+.multa span {
+    color: #a03131;
+}
+
+.sin_multa {
+    background: #00ff3722;
+    border: 1px solid #296f38;
+}
+
+.sin_multa span {
+    color: #1c5a29;
 }
 
 .login-div {

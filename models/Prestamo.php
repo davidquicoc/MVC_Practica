@@ -10,7 +10,7 @@ class Prestamo {
     }
 
     //  Función que inserta un préstamos con los datos del array
-    public function sacarLibro(array $data) {
+    public function sacar(array $data) {
         $usuario_id = $data['usuario_id'];
         $libro_id = $data['libro_id'];
         $fecha_prestamo = $data['fecha_prestamo'];
@@ -18,6 +18,10 @@ class Prestamo {
         $multa = $data['multa'];
 
         return $this->db->query("INSERT INTO prestamo (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, multa) VALUES ('$usuario_id', '$libro_id', '$fecha_prestamo', '$fecha_devolucion', '$multa')");
+    }
+
+    public function devolver($id) {
+        return $this->db->query("DELETE FROM prestamo WHERE id = '$id'");
     }
 
     //  Función que listará todos los préstamos
