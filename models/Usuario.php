@@ -8,6 +8,14 @@ class Usuario {
         global $conn;
         $this->db = $conn;
     }
+/*
+    public function buscarEmailIdenticos($email) {
+        $result = $this->db->query("SELECT * FROM usuario WHERE email = '$email");
+        if ($result->num_rows > 0) {
+            return true;
+        }
+        return false;
+    }*/
 
     //  Función que comprueba si hay más de un usuario con el mismo email
     public function encontrarPorEmail($email) {

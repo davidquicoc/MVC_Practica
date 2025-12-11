@@ -78,5 +78,10 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
     <?php } ?>
 </section>
 <?php
+echo __DIR__;
+echo "<hr>";
+var_dump(__DIR__);
+?>
+<?php
 include __DIR__ . '/layout/footer.php';
 ?>

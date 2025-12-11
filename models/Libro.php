@@ -68,19 +68,8 @@ class Libro {
         return 0;
     }
 
-    //  Función que cuenta el total de libros disponibles
-    public function contarLibrosDisponibles() {
-        $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = 1");
-        if ($result) {
-            $fila = $result->fetch_assoc();
-            return $fila['total'];
-        }
-        return 0;
-    }
-
-    //  Función que cuenta el total de libros no disponibles
-    public function contarLibrosNoDisponibles() {
-        $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = 0");
+    public function contarLibrosSegunDisponibilidad($numDisponibilidad) {
+        $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = $numDisponibilidad");
         if ($result) {
             $fila = $result->fetch_assoc();
             return $fila['total'];

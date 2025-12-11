@@ -62,7 +62,7 @@ class AuthController {
         
         $usuarioMod = new Usuario();
         if ($usuarioMod->encontrarPorEmail($formulario['email'])) {
-            $_SESSION['error'] = "Coreo asignado";
+            $_SESSION['error'] = "Correo asignado";
             redirigir('/index.php?action=register');
             return;
         }

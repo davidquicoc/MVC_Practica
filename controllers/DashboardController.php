@@ -15,8 +15,8 @@ class DashboardController {
         $totalUsuariosExistentes = (new Usuario())->contarUsuarios();
         $totalPrestamosExistentes = (new Prestamo())->contarPrestamos();
 
-        $totalLibrosDisponibles = (new Libro())->contarLibrosDisponibles();
-        $totalLibrosNoDisponibles = (new Libro())->contarLibrosNoDisponibles();
+        $totalLibrosDisponibles = (new Libro())->contarLibrosSegunDisponibilidad(1);
+        $totalLibrosNoDisponibles = (new Libro())->contarLibrosSegunDisponibilidad(0);
         
         $prestamosDelUsuario = [];
         if (isset($_SESSION['user'])) {
