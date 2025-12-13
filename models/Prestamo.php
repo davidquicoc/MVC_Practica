@@ -16,7 +16,7 @@ class Prestamo {
         $fecha_prestamo = $data['fecha_prestamo'];
         $fecha_devolucion = $data['fecha_devolucion'];
         $multa = $data['multa'];
-
+        
         return $this->db->query("INSERT INTO prestamo (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, multa) VALUES ('$usuario_id', '$libro_id', '$fecha_prestamo', '$fecha_devolucion', '$multa')");
     }
 

@@ -8,7 +8,7 @@ class BookController {
     public function mostrarIndexLibros() {
         require_login();
 
-        $listaLibros = (new Libro())->mostrarLibros();
+        $listaLibros = (new Libro())->obtenerLibros();
         require __DIR__ . '/../views/libros/index.php';
     }
 
@@ -22,7 +22,7 @@ class BookController {
     public function mostrarEdit() {
         require_login();
         if (!isset($_POST['id'])) {
-            $_SESSION['libro-error'] = "Error al intentar editar un libro";
+            $_SESSION['libro-error'] = "No se ha especificado el libro a editar.";
             redirigir('/index.php?action=libros');
         }
         require __DIR__ . '/../views/libros/edit.php';
@@ -43,7 +43,7 @@ class BookController {
         if ($libroMod->añadirLibro($formulario)) {
             $_SESSION['libro-mensaje'] = "Libro creado correctamente.";
         } else {
-            $_SESSION['libro-error'] = "Creación de libro fallado.";
+            $_SESSION['libro-error'] = "Error en la creación del libro.";
         }
         redirigir('/index.php?action=libros');
     }
@@ -61,10 +61,14 @@ class BookController {
         ];
 
         $libroMod = new Libro();
-        if ($libroMod->modificarLibro($formulario)) {
+        $resultado = $libroMod->modificarLibro($formulario);
+
+        if ($resultado == 2) {
             $_SESSION['libro-mensaje'] = "Libro modificado correctamente.";
+        } elseif($resultado == 1) {
+            $_SESSION['libro-mensaje'] = "No se realizaron cambios en el libro '" . $formulario['titulo'] . "'.";
         } else {
-            $_SESSION['libro-error'] = "Fallido la operación de editar libro.";
+            $_SESSION['libro-error'] = "Error en la edición del libro.";
         }
         redirigir('/index.php?action=libros');
     }
@@ -76,7 +80,7 @@ class BookController {
         if ($libroMod->eliminarLibro($id)) {
             $_SESSION['libro-mensaje'] = "Libro borrado correctamente.";
         } else {
-            $_SESSION['libro-error'] = "Libro no eliminado.";
+            $_SESSION['libro-error'] = "Error al eliminar el libro.";
         }
         redirigir('/index.php?action=libros');
     }

@@ -14,6 +14,11 @@ $prestamosExistentes = $prestamos ?? [];
 ?>
 <!--SEGUIR MÁS ADELANTE :D-->
 <section>
+    <div class="div-mensaje">
+        <?php if (!empty($prestamo_error)) { ?>
+        <p><?= $prestamo_error; ?></p>
+        <?php } ?>
+    </div>
     <?php if (!empty($usuarioLoginPrestamos)) { ?>
     <div class="user-data">
         <h2>Libros prestados por el usuario '<?= $_SESSION['user']['nombre']; ?>'</h2>
@@ -111,6 +116,10 @@ $prestamosExistentes = $prestamos ?? [];
     </div>
     <?php } ?>
 </section>
+<?php
+
+var_dump($_SESSION);
+?>
 <?php
 include __DIR__ . '/../layout/footer.php';
 ?>

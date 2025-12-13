@@ -10,7 +10,7 @@ class Libro {
     }
 
     //  Función que muestra todos los libros en un array asociativo
-    public function mostrarLibros() {
+    public function obtenerLibros() {
         try {
             $result = $this->db->query("SELECT * FROM libro");
             if (!$result) {
@@ -44,15 +44,24 @@ class Libro {
         $año_publicacion = $data['año_publicacion'];
         $n_paginas = $data['n_paginas'];
 
-        return $this->db->query("UPDATE libro
-            SET titulo = '$titulo',
+        $comparacion = (new Libro())->compararLibro($data);
+
+        if ($comparacion == 2) {
+            $result = $this->db->query("UPDATE libro
+                SET titulo = '$titulo',
                 autor = '$autor',
                 editorial = '$editorial',
                 genero = '$genero',
                 año_publicacion = '$año_publicacion',
                 n_paginas = '$n_paginas' WHERE id = '$id'");
+                return $result ? 2 : 0;
+        } elseif ($comparacion == 1) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
-
+    
     //  Función que eliminará un libro de la base de datos
     public function eliminarLibro($id) {
         return $this->db->query("DELETE FROM libro WHERE id = '$id'");
@@ -86,6 +95,23 @@ class Libro {
     public function actualizarDisponibilidad($id, $estado) {
         $estado = (int) $estado;
         return $this->db->query("UPDATE libro SET disponibilidad = $estado WHERE id = $id");
+    }
+
+    private function compararLibro(array $data)  {
+        $idData = $data['id'];
+        $result = $this->db->query("SELECT * FROM libro WHERE id = $idData");
+        if ($result && $result->num_rows > 0) {
+            $fila = $result->fetch_assoc();
+            if ($fila['titulo'] == $data['titulo'] && $fila['autor'] == $data['autor']
+                && $fila['editorial'] == $data['editorial'] && $fila['genero'] == $data['genero']
+                && $fila['año_publicacion'] == $data['año_publicacion'] && $fila['n_paginas'] == $data['n_paginas']
+                ) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+        return 0;
     }
 }
 ?>
