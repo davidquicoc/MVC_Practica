@@ -6,23 +6,26 @@ unset($_SESSION['register-confirm']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | Biblioteca</title>
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/auth.css">
+    <link rel="icon" type="image/png" href="<?= BASE_PATH ?>/assets/images/website/icon_website.png">
 </head>
+
 <body>
     <div class="container">
         <form action="<?= BASE_PATH ?>/index.php?action=do-login" method="POST">
             <h2>Inicia sesión</h2>
             <?php
-                if ($error !== '') {
-                    echo "<p class='error-text'>$error</p>";
-                }
-                if ($register_confirm !== '') {
-                    echo "<p class='register-text'>$register_confirm</p>";
-                }
+            if ($error !== '') {
+                echo "<p class='error-text'>$error</p>";
+            }
+            if ($register_confirm !== '') {
+                echo "<p class='register-text'>$register_confirm</p>";
+            }
             ?>
             <label for="email">Email:</label>
             <input type="email" name="email" id="email" required>
@@ -35,4 +38,5 @@ unset($_SESSION['register-confirm']);
         </form>
     </div>
 </body>
+
 </html>

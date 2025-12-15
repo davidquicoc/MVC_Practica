@@ -3,6 +3,7 @@ require_once __DIR__ . '/../models/Libro.php';
 require_once __DIR__ . '/../models/Usuario.php';
 require_once __DIR__ . '/../models/Prestamo.php';
 
+//  Controlador que muestra la vista de la página inicial de la biblioteca
 class DashboardController {
     public function index() {
         if (session_status() === PHP_SESSION_NONE) {

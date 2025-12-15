@@ -23,11 +23,11 @@ if (isset($libros['error'])) {
 <section class="section-libros">
     <div class="mensajes-libros">
         <?php
-            if (!empty($libro_mensaje)) {
-                echo "<p class='mensaje correcto'>$libro_mensaje</p>";
-            } elseif (!empty($libro_error)) {
-                echo "<p class='mensaje error'>$libro_error</p>";
-            }
+        if (!empty($libro_mensaje)) {
+            echo "<p class='mensaje correcto'>$libro_mensaje</p>";
+        } elseif (!empty($libro_error)) {
+            echo "<p class='mensaje error'>$libro_error</p>";
+        }
         ?>
     </div>
 
@@ -60,18 +60,18 @@ if (isset($libros['error'])) {
                 </tr>
             </thead>
             <tbody>
-            <?php
+                <?php
                 if ($hayLibros) {
-                    foreach($libros as $libro) {
+                    foreach ($libros as $libro) {
                         echo "<tr>";
-                            echo "<td> " . $libro['titulo'] . "</td>";
-                            echo "<td>" . $libro['autor'] . "</td>";
-                            echo "<td>" . $libro['editorial'] . "</td>";
-                            echo "<td>" . $libro['genero'] . "</td>";
-                            echo "<td>" . $libro['año_publicacion'] . "</td>";
-                            echo "<td>" . $libro['n_paginas'] . "</td>";
-                            echo "<td>";
-                                echo "
+                        echo "<td> " . $libro['titulo'] . "</td>";
+                        echo "<td>" . $libro['autor'] . "</td>";
+                        echo "<td>" . $libro['editorial'] . "</td>";
+                        echo "<td>" . $libro['genero'] . "</td>";
+                        echo "<td>" . $libro['año_publicacion'] . "</td>";
+                        echo "<td>" . $libro['n_paginas'] . "</td>";
+                        echo "<td>";
+                        echo "
                                     <div class='button-libro'>
                                         <form method='POST' action='index.php?action=modify-book'>
                                             <input type='hidden' value='" . $libro['id'] . "' name='id'>
@@ -87,21 +87,21 @@ if (isset($libros['error'])) {
                                             <input type='hidden' name='id' value='" . $libro['id'] . "'>
                                             <input type='submit' value='Borrar'>
                                         </form>";
-                            echo "</td>";
+                        echo "</td>";
                         echo "</tr>";
                     }
                 } else {
-                        echo "<tr>
+                    echo "<tr>
                             <td colspan='7' class='error-bd'>
                                 No hay libros en la base de datos
                             </td>
                         </tr>";
                 }
-            ?>
+                ?>
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">Biblioteca&nbsp;&copy;&nbsp;<?= date('Y'); ?></td>
+                    <td colspan="7">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>

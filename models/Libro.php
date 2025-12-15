@@ -2,14 +2,17 @@
 require_once __DIR__ . '/../config/config.php';
 
 class Libro {
+
+    //  Objeto privado de mysqli
     private mysqli $db;
 
     public function __construct() {
         global $conn;
+        //  Conexión a la base de datos establecida en config.php
         $this->db = $conn;
     }
 
-    //  Función que muestra todos los libros en un array asociativo
+    //  Devuelve todas las filas de la tabla libros o puede devolver un mensaje de error
     public function obtenerLibros() {
         try {
             $result = $this->db->query("SELECT * FROM libro");
@@ -22,7 +25,7 @@ class Libro {
         }
     }
 
-    //  Función que añadirá un libro a la base de datos
+    //  Devuelve TRUE/FALSE si se insertó el libro a la base de datos con sus datos pasados en $data
     public function añadirLibro(array $data) {
         $titulo = $data['titulo'];
         $autor = $data['autor'];
@@ -34,7 +37,10 @@ class Libro {
         return $this->db->query("INSERT INTO libro (titulo, autor, editorial, genero, año_publicacion, n_paginas) VALUES ('$titulo', '$autor', '$editorial', '$genero', '$año_publicacion', '$n_paginas')");
     }
 
-    //  Función que modificará un libro de la base de datos
+    //  Devuelve
+    //  2 si el libro se modificó
+    //  1 si no hubo ningún cambio
+    //  0 si ocurrió un error
     public function modificarLibro(array $data) {
         $id = $data['id'];
         $titulo = $data['titulo'];
@@ -55,19 +61,17 @@ class Libro {
                 año_publicacion = '$año_publicacion',
                 n_paginas = '$n_paginas' WHERE id = '$id'");
                 return $result ? 2 : 0;
-        } elseif ($comparacion == 1) {
-            return 1;
-        } else {
-            return 0;
         }
+        if ($comparacion == 1) return 1;
+        return 0;
     }
     
-    //  Función que eliminará un libro de la base de datos
+    //  Devuelve TRUE/FALSE si se eleminó el libro correctamente en la base de datos mediante su id
     public function eliminarLibro($id) {
         return $this->db->query("DELETE FROM libro WHERE id = '$id'");
     }
 
-    //  Función que cuenta el total de libros existentes en la base de datos
+    //  Devuelve en número entero, el total de libros en la base de datos
     public function contarLibros() {
         $result = $this->db->query("SELECT COUNT(*) as total FROM libro");
         if ($result) {
@@ -77,6 +81,7 @@ class Libro {
         return 0;
     }
 
+    //  Devuelve en número entero, el total de libros en la base de datos según la disponibilidad pasada por el parámetro
     public function contarLibrosSegunDisponibilidad($numDisponibilidad) {
         $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = $numDisponibilidad");
         if ($result) {
@@ -86,17 +91,21 @@ class Libro {
         return 0;
     }
 
-    //  Función que obtiene el id y titulo de los libros con disponibilidad
-    public function obtenerLibrosDisponibles() {
+    //  Devuelve el id y titulo de todos los libros disponibles de la base de datos
+    public function obtenerIdTituloDeLibrosDisponibles() {
         return $this->db->query("SELECT id, titulo FROM libro WHERE disponibilidad = 1");
     }
 
-    //  Función que actualiza la disponibilidad de un libro
+    //  Devuelve TRUE/FALSE si se actualizó la disponibilidad de un libro a la base de datos
     public function actualizarDisponibilidad($id, $estado) {
         $estado = (int) $estado;
         return $this->db->query("UPDATE libro SET disponibilidad = $estado WHERE id = $id");
     }
 
+    //  Devuelve:
+    //  1 si los datos del libro coinciden con los pasados por el parámetro $data
+    //  2 si existen diferencias
+    //  0 si no existe el libro o hubo un error
     private function compararLibro(array $data)  {
         $idData = $data['id'];
         $result = $this->db->query("SELECT * FROM libro WHERE id = $idData");

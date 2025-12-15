@@ -98,6 +98,244 @@ body {
     width: 100%;
 }
 
+section {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.div-mensaje {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.mensaje {
+    padding: 15px 20px;
+    border-radius: 13.5px;
+    font-size: 1.53rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.mensaje.correcto {
+    background: #4ba87d;
+    color: #ffffff;
+    border: 1px solid #3a8563;
+}
+
+.mensaje.error {
+    background: #df5553;
+    color: #ffffff;
+    border: 1px solid #c93a38;
+}
+
+.data-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background: #00000011;
+    padding: 30px;
+    gap: 20px;
+    border-radius: 15px;
+}
+
+.user-data {
+    background: #00000022;
+    padding: 15px 20px;
+    width: 100%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.user-data h2 {
+    font-size: 2.12rem;
+    text-decoration: underline;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.user-data h2 span {
+    font-style: italic;
+}
+
+.user-data ul, p {
+    font-size: 1.5rem;
+}
+
+.user-data p,
+.user-data ul {
+    margin: 7.5px 0;
+}
+
+.user-data ul {
+    list-style: none;
+}
+
+.user-data ul li {
+    display: inline;
+    margin: 0 20px;
+}
+
+.user-data small {
+    font-weight: 700;
+}
+
+.form-prestamo {
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+    flex-direction: column;
+    background: #ffffff94;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.form-prestamo h2 {
+    margin: 15px 0;
+    font-size: 1.712rem;
+    font-weight: 900;
+}
+
+table {
+    width: 100%;
+    height: auto;
+    border-collapse: collapse;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+thead {
+    background: #4d4e5e;
+    border-collapse: collapse;
+}
+
+th {
+    font-size: 1.4rem;
+}
+
+th, td {
+    text-align: center;
+    padding: 10px;
+}
+
+td {
+    border-right: 1px solid #000000;
+    font-size: 1.24rem;
+}
+
+tbody td:nth-child(even) {
+    background: #70acb1;
+}
+
+tbody td:nth-child(odd) {
+    background: #9bcfd3;
+}
+
+tbody tr td:last-child {
+    border-right: none;
+    background: #b4d0da;
+}
+
+tbody tr td input,
+tbody tr td select {
+    text-align: center;
+    font-family: "Google Sans Flex", sans-serif;
+}
+
+tbody tr td:nth-child(5) input {
+    width: 70px;
+}
+
+.input-button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-button input {
+    background: #00000005;
+    padding: 5px 10px;
+    border: 1px solid #00000000;
+    cursor: pointer;
+    font-weight: 400;
+    transition: 0.4s;
+}
+
+.input-button input:hover {
+    background: #ffffff93;
+    font-weight: 700;
+    border: 1px solid #585858;
+    letter-spacing: 0.012px;
+}
+
+.prestamos-existentes {
+    width: 100%;
+    padding: 20px;
+    background: #00000004;
+    border-radius: 15px;
+    gap: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.prestamos-existentes h2 {
+    width: 100%;
+    text-align: center;
+    font-size: 1.921rem;
+    margin: 10px 0;
+}
+
+.prestamos-existentes div {
+    background: #00000011;
+    padding: 12.5px;
+    display: flex;
+    border-radius: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5px;
+}
+
+.prestamos-existentes div p {
+    font-size: 1.7rem;
+}
+
+.prestamos-existentes div span {
+    font-weight: 600;
+    font-size: 1.325rem;
+}
+
+.prestamos-existentes input {
+    background: #00000022;
+    margin: 5px 0;
+    padding: 7.3px 10px;
+    border: 0px solid #00000000;
+    cursor: pointer;
+    border-radius: 15px;
+    font-family: "Google Sans Flex", sans-serif;
+    transition: 0.4s;
+}
+
+.prestamos-existentes input:hover {
+    background: #9a9a9a;
+    border: 1px solid #bab5b5;
+    border-radius: 10px;
+}
+
 .footer {
     background: #4d4e5e;
     color: #ffffff;

@@ -63,6 +63,7 @@ form > input {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     color: #3c3e44;
+    font-family: "Google Sans Flex", sans-serif;
 }
 
 #titulo {

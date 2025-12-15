@@ -4,7 +4,7 @@ $user = 'root';         //  Usuario: root
 $passwd = 'root';       //  Contraseña: root
 $db = 'biblioteca';     //  Base de datos: biblioteca
 
-//  Conexión con mysqli
+//  Conexión con mysqli a la base de datos biblioteca
 $conn = new mysqli($host, $user, $passwd, $db);
 
 if ($conn->connect_error) {

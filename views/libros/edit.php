@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edción de libros | Biblioteca</title>
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/libro-form.css">
+    <link rel="icon" type="image/png" href="<?= BASE_PATH ?>/assets/images/website/icon_website.png">
 </head>
+
 <body>
     <div class="container">
         <form method="POST" action="index.php?action=edit-book">
@@ -30,4 +33,5 @@
         </form>
     </div>
 </body>
+
 </html>

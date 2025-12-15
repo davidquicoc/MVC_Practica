@@ -4,20 +4,23 @@ unset($_SESSION['error']);
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register | Biblioteca</title>
     <link rel="stylesheet" href="<?= BASE_PATH ?>/assets/css/auth.css">
+    <link rel="icon" type="image/png" href="<?= BASE_PATH ?>/assets/images/website/icon_website.png">
 </head>
+
 <body>
     <div class="container">
         <form action="<?= BASE_PATH ?>/index.php?action=do-register" method="POST">
             <h2>Regístrate</h2>
             <?php
-                if ($error !== '') {
-                    echo "<p class='error-text'>$error</p>";
-                }
+            if ($error !== '') {
+                echo "<p class='error-text'>$error</p>";
+            }
             ?>
             <label for="dni">DNI:</label>
             <input type="text" name="dni" id="dni" required>
@@ -31,9 +34,10 @@ unset($_SESSION['error']);
             <input type="password" name="contraseña" id="contraseña" required>
             <div class="button-block">
                 <input type="submit" value="Acceder">
-            </div> 
+            </div>
             <p>¿Tienes una cuenta de usuario? <a href="<?= BASE_PATH ?>/index.php?action=login">Inicie sesión</a></p>
-            </form>
+        </form>
     </div>
 </body>
+
 </html>
