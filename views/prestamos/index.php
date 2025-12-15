@@ -12,7 +12,6 @@ unset($_SESSION['prestamo-mensaje']);
 $usuarioLoginPrestamos = $librosPrestados ?? [];
 $prestamosExistentes = $prestamos ?? [];
 ?>
-<!--SEGUIR MÁS ADELANTE :D-->
 <section>
     <?php if (!empty($prestamo_error) || !empty($prestamo_mensaje)) { ?>
         <div class="div-mensaje">
@@ -38,7 +37,7 @@ $prestamosExistentes = $prestamos ?? [];
         </div>
         <div class="form-prestamo">
             <h2>Prestar libro</h2>
-            <form method="POST" action="index.php?action=sacar-libro">
+            <form method="POST" action="<?= BASE_PATH ?>/index.php?action=sacar-libro">
                 <table>
                     <thead>
                         <tr>
@@ -46,7 +45,7 @@ $prestamosExistentes = $prestamos ?? [];
                             <th><label for="libro_id">Libro</label></th>
                             <th><label for="fecha_prestamo">Fecha de préstamo</label></th>
                             <th><label for="fecha_devolucion">Fecha de devolución</label></th>
-                            <th><label for="multa">Multa</label></th>
+                            <th><label for="multa">Multa (€)</label></th>
                             <th>&nbsp;</th>
                         </tr>
                     </thead>
@@ -105,9 +104,9 @@ $prestamosExistentes = $prestamos ?? [];
                         <p>Título del libro: <span><?= $prestamo['titulo_libro']; ?></span></p>
                         <p>Fecha de préstamo: <span><?= $prestamo['fecha_prestamo']; ?></span></p>
                         <p>Fecha de devolución: <span><?= $prestamo['fecha_devolucion']; ?></span></p>
-                        <p>Multa: <span><?= $prestamo['multa']; ?></span></p>
-                        <p>Estado: <span><?= ($prestamo['fecha_devolucion'] > date('Y-m-d')) ? "Retrasado" : "Prestado"; ?></span></p>
-                        <form method="POST" action="index.php?action=devolver-libro">
+                        <p>Multa: <span><?= $prestamo['multa']; ?> €</span></p>
+                        <p>Estado: <span><?= ($prestamo['fecha_devolucion'] < date('Y-m-d')) ? "Retrasado" : "Prestado"; ?></span></p>
+                        <form method="POST" action="<?= BASE_PATH ?>/index.php?action=devolver-libro">
                             <input type="hidden" name="prestamo_id" value="<?= $prestamo['prestamo_id']; ?>">
                             <input type="hidden" name="libro_id" value="<?= $prestamo['libro_id']; ?>">
                             <input type="submit" value="Devolver libro">

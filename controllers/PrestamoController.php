@@ -21,12 +21,15 @@ class PrestamoController {
 
     //  Saca un libro añadiendo un préstamo al usuario y actualiza la disponibilidad de un libro
     public function sacarLibro() {
+        $multa = $_POST['multa'] ?? '';
+        if ($multa === '') $multa = 0;
+
         $formulario = [
             'usuario_id' => $_POST['usuario_id'] ?? '',
             'libro_id' => $_POST['libro_id'] ?? '',
             'fecha_prestamo' => $_POST['fecha_prestamo'] ?? '',
             'fecha_devolucion' => $_POST['fecha_devolucion'] ?? '',
-            'multa' => $_POST['multa'] ?? 0
+            'multa' => $multa
         ];
 
         if (empty($formulario['usuario_id']) || empty($formulario['libro_id'])) {
@@ -81,15 +84,16 @@ class PrestamoController {
         $libroMod = new Libro();
 
         $comprobacionLibro = $libroMod->obtenerIdTituloDeLibrosDisponibles();
-        $noEsDisponible = false;
+        $estaDisponible = false;
+
         foreach ($comprobacionLibro as $comprobacion) {
-            if ($comprobacion['id'] !== $libro_id) {
-                $noEsDisponible = true;
+            if ($comprobacion['id'] == $libro_id) {
+                $estaDisponible = true;
                 break;
             }
         }
 
-        if (!$noEsDisponible) {
+        if ($estaDisponible) {
             $_SESSION['prestamo-error'] = "Libro no encontrado o libro que cuenta con disponibilidad.";
             redirigir('/index.php?action=prestamos');
             return;

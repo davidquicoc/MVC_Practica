@@ -73,7 +73,7 @@ if (isset($libros['error'])) {
                         echo "<td>";
                         echo "
                                     <div class='button-libro'>
-                                        <form method='POST' action='index.php?action=modify-book'>
+                                        <form method='POST' action='" . BASE_PATH . "/index.php?action=modify-book'>
                                             <input type='hidden' value='" . $libro['id'] . "' name='id'>
                                             <input type='hidden' value='" . $libro['titulo'] . "' name='titulo'>
                                             <input type='hidden' value='" . $libro['autor'] . "' name='autor'>
@@ -83,7 +83,7 @@ if (isset($libros['error'])) {
                                             <input type='hidden' value='" . $libro['n_paginas'] . "' name='n_paginas'>
                                             <input type='submit' value='Editar'>
                                         </form>
-                                        <form method='POST' action='index.php?action=delete-book'>
+                                        <form method='POST' action='" . BASE_PATH . "/index.php?action=delete-book'>
                                             <input type='hidden' name='id' value='" . $libro['id'] . "'>
                                             <input type='submit' value='Borrar'>
                                         </form>";

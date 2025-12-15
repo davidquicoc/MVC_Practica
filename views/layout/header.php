@@ -27,10 +27,10 @@
             </div>
             <nav class="header-navbar">
                 <ul>
-                    <li><a href="index.php">Inicio</a></li>
+                    <li><a href="<?= BASE_PATH ?>/index.php">Inicio</a></li>
                     <?php if (!empty($_SESSION['user'])) { ?>
-                        <li><a href="index.php?action=libros">Libros</a></li>
-                        <li><a href="index.php?action=prestamos">Préstamos</a></li>
+                        <li><a href="<?= BASE_PATH ?>/index.php?action=libros">Libros</a></li>
+                        <li><a href="<?= BASE_PATH ?>/index.php?action=prestamos">Préstamos</a></li>
                     <?php } ?>
                 </ul>
             </nav>

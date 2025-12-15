@@ -4,10 +4,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-//  Definir una constante que sirve como ruta base de la práctica
-define('BASE_PATH', '/MVC_Practica');
+//  Obtiene el directorio padre donde se encuentra el script actual (index.php)
+$scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+
+//  Recorta las barras '/' o '\' que sobren al final para evitar dobles barras
+$basePath = rtrim($scriptDir, '/\\');
+
+//  Definir una constante que sirve como ruta base dinámica de la aplicación
+define('BASE_PATH', $basePath);
 
 function redirigir($path) {
+    //  Concatena la ruta base dinámica con el destino para generar la URL correcta
     header("Location: " . BASE_PATH . $path);
     exit();
 }

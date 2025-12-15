@@ -11,7 +11,7 @@
 
 <body>
     <div class="container">
-        <form method="POST" action="index.php?action=create-book">
+        <form method="POST" action="<?= BASE_PATH ?>/index.php?action=create-book">
             <h2>Crear nuevo libro</h2>
             <label for="titulo">Titulo:</label>
             <input type="text" name="titulo" id="titulo" required>
@@ -27,7 +27,7 @@
             <input type="number" name="n_paginas" id="n_paginas" required>
             <div class="button-block">
                 <input type="submit" value="Crear libro">
-                <a href="index.php?action=libros">Volver a libros</a>
+                <a href="<?= BASE_PATH ?>index.php?action=libros">Volver a libros</a>
             </div>
         </form>
     </div>

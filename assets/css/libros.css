@@ -196,6 +196,13 @@ td {
     font-size: 1.24rem;
 }
 
+tbody tr td.error-bd {
+    background: #df5553 !important;
+    color: #ffffff;
+    border: none;
+    font-size: 1.42rem;
+}
+
 tbody td:nth-child(even) {
     background: #70acb1;
 }
@@ -211,13 +218,6 @@ tbody tr td:last-child {
 
 tbody tr:last-child td {
     border-bottom: none;
-}
-
-.error-bd {
-    background: #df5553;
-    color: #ffffff;
-    border: none;
-    font-size: 1.42rem;
 }
 
 tfoot {
