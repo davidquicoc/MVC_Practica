@@ -35,11 +35,32 @@ class PrestamoController {
         if (empty($formulario['usuario_id']) || empty($formulario['libro_id'])) {
             $_SESSION['prestamo-error'] = "No se detecto el identificador del usuario o libro.";
             redirigir('/index.php?action=prestamos');
+            return;
         }
 
         if (empty($formulario['fecha_prestamo']) || empty($formulario['fecha_devolucion'])) {
             $_SESSION['prestamo-error'] = "Las fechas de préstamo y devolución no deben estar vacías.";
             redirigir('/index.php?action=prestamos');
+            return;
+        }
+        
+        if (!is_numeric($multa)) {
+            $_SESSION['prestamo-error'] = "El valor de la multa debe ser numérico.";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
+
+        $multaNum = floatval($multa);
+        if ($multaNum < -999.99 || $multaNum > 999.99) {
+            $_SESSION['prestamo-error'] = "La multa está fuera del rango permitido.";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
+
+        if ($multa < 0)  {
+            $_SESSION['prestamo-error'] = "El valor de la multa no debe ser negativo.";
+            redirigir('/index.php?action=prestamos');
+            return;
         }
 
         $libroMod = new Libro();
@@ -63,6 +84,7 @@ class PrestamoController {
         if ($formulario['fecha_prestamo'] > $formulario['fecha_devolucion']) {
             $_SESSION['prestamo-error'] = "La fecha de préstamo no puede ser mayor a la fecha de devolución.";
             redirigir('/index.php?action=prestamos');
+            return;
         }
 
         $prestamoMod = new Prestamo();

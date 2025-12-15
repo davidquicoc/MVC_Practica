@@ -40,6 +40,21 @@ class BookController {
             'n_paginas' => $_POST['n_paginas'] ?? ''
         ];
 
+        if (empty($formulario['titulo']) || empty($formulario['autor']) ||
+            empty($formulario['editorial']) || empty($formulario['genero']) ||
+            empty($formulario['año_publicacion']) || empty($formulario['n_paginas'])
+        ) {
+            $_SESSION['libro-error'] = "No se debe dejar ningún campo del formulario vacío.";
+            redirigir('/index.php?action=libros');
+            return;
+        }
+
+        if (!is_numeric($formulario['año_publicacion']) || !is_numeric($formulario['n_paginas'])) {
+            $_SESSION['libro-error'] = "El campo de 'año de publicación' y de 'número de páginas' debe ser de valor numérico.";
+            redirigir('/index.php?action=libros');
+            return;
+        }
+        
         $libroMod = new Libro();
         if ($libroMod->añadirLibro($formulario)) {
             $_SESSION['libro-mensaje'] = "Libro creado correctamente.";
@@ -64,9 +79,24 @@ class BookController {
         $libroMod = new Libro();
         $resultado = $libroMod->modificarLibro($formulario);
 
+        if (empty($formulario['titulo']) || empty($formulario['autor']) ||
+            empty($formulario['editorial']) || empty($formulario['genero']) ||
+            empty($formulario['año_publicacion']) || empty($formulario['n_paginas'])
+        ) {
+            $_SESSION['libro-error'] = "No se debe dejar ningún campo del formulario vacío.";
+            redirigir('/index.php?action=libros');
+            return;
+        }
+        
+        if (!is_numeric($formulario['año_publicacion']) || !is_numeric($formulario['n_paginas'])) {
+            $_SESSION['libro-error'] = "El campo de 'año de publicación' o/y de 'número de páginas' debe ser de valor numérico.";
+            redirigir('/index.php?action=libros');
+            return;
+        }
+
         if ($resultado == 2) {
-            $_SESSION['libro-mensaje'] = "Libro modificado correctamente.";
-        } elseif($resultado == 1) {
+            $_SESSION['libro-mensaje'] = "Libro '" . $formulario['titulo'] . "' modificado correctamente.";
+        } elseif ($resultado == 1) {
             $_SESSION['libro-mensaje'] = "No se realizaron cambios en el libro '" . $formulario['titulo'] . "'.";
         } else {
             $_SESSION['libro-error'] = "Error en la edición del libro.";

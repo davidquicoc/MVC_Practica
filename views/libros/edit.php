@@ -28,7 +28,7 @@
             <input type="number" name="n_paginas" id="n_paginas" value="<?= $_POST['n_paginas']; ?>" required>
             <div class="button-block">
                 <input type="submit" value="Editar libro">
-                <a href="<?= BASE_PATH ?>index.php?action=libros">Volver a libros</a>
+                <a href="<?= BASE_PATH ?>/index.php?action=libros">Volver a libros</a>
             </div>
         </form>
     </div>
