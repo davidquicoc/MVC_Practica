@@ -13,58 +13,68 @@ class PrestamoController {
         $librosDisponibles = (new Libro())->obtenerIdTituloDeLibrosDisponibles();
         $usuariosActuales = (new Usuario())->obtenerIdNombreDeLosUsuarios();
 
-        $librosPrestados = (new Prestamo())->obtenerPrestamosPorUsuario($_SESSION['user']['id']);
+        $usuarioLoginPrestamos = (new Prestamo())->obtenerActivosUsuario($_SESSION['user']['id']);
+        $prestamosPendientes = (new Prestamo())->obtenerPendientes();
+        $prestamosHistorial = (new Prestamo())->obtenerHistorial();
 
-        $prestamos = (new Prestamo())->listarPrestamos();
         require __DIR__ . '/../views/prestamos/index.php';
     }
 
     //  Saca un libro añadiendo un préstamo al usuario y actualiza la disponibilidad de un libro
     public function sacarLibro() {
-        $multa = $_POST['multa'] ?? '';
-        if ($multa === '') $multa = 0;
+        $multaInput = $_POST['multa'] ?? '';
+
+        if (!is_numeric($multaInput)) {
+            $_SESSION['prestamo-error'] = "El valor de la multa debe ser numérico.";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
+        
+        $multa = floatval($multaInput);
+
+        if ($multa <= 0) {
+            $_SESSION['prestamo-error'] = "La multa debe ser un valo mayor a 0.";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
+
+        if ($multa > 99999.99) {
+            $_SESSION['prestamo-error'] = "La multa excede el límite permitido (Máx.: 99999.99€).";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
 
         $formulario = [
             'usuario_id' => $_POST['usuario_id'] ?? '',
             'libro_id' => $_POST['libro_id'] ?? '',
             'fecha_prestamo' => $_POST['fecha_prestamo'] ?? '',
             'fecha_devolucion' => $_POST['fecha_devolucion'] ?? '',
+            'fecha_devolucion_limite' => $_POST['fecha_devolucion_limite'] ?? '',
             'multa' => $multa
         ];
 
-        if (empty($formulario['usuario_id']) || empty($formulario['libro_id'])) {
-            $_SESSION['prestamo-error'] = "No se detecto el identificador del usuario o libro.";
+        if (empty($formulario['usuario_id']) || empty($formulario['libro_id']) || 
+            empty($formulario['fecha_prestamo']) || empty($formulario['fecha_devolucion']) || 
+            empty($formulario['fecha_devolucion_limite'])) {
+            
+            $_SESSION['prestamo-error'] = "Todos los campos (usuario, libro y fechas) son obligatorios.";
             redirigir('/index.php?action=prestamos');
             return;
         }
 
-        if (empty($formulario['fecha_prestamo']) || empty($formulario['fecha_devolucion'])) {
-            $_SESSION['prestamo-error'] = "Las fechas de préstamo y devolución no deben estar vacías.";
-            redirigir('/index.php?action=prestamos');
-            return;
-        }
-        
-        if (!is_numeric($multa)) {
-            $_SESSION['prestamo-error'] = "El valor de la multa debe ser numérico.";
+        if ($formulario['fecha_prestamo'] > $formulario['fecha_devolucion']) {
+            $_SESSION['prestamo-error'] = "La fecha de préstamo no puede ser mayor a la fecha de devolución.";
             redirigir('/index.php?action=prestamos');
             return;
         }
 
-        $multaNum = floatval($multa);
-        if ($multaNum < -999.99 || $multaNum > 999.99) {
-            $_SESSION['prestamo-error'] = "La multa está fuera del rango permitido.";
-            redirigir('/index.php?action=prestamos');
-            return;
-        }
-
-        if ($multa < 0)  {
-            $_SESSION['prestamo-error'] = "El valor de la multa no debe ser negativo.";
+        if ($formulario['fecha_devolucion'] > $formulario['fecha_devolucion_limite']) {
+            $_SESSION['prestamo-error'] = "La fecha de aviso no puede ser mayor a la fecha límite.";
             redirigir('/index.php?action=prestamos');
             return;
         }
 
         $libroMod = new Libro();
-
         $comprobacionLibro = $libroMod->obtenerIdTituloDeLibrosDisponibles();
         $esDisponible = false;
 
@@ -81,14 +91,7 @@ class PrestamoController {
             return;
         }
 
-        if ($formulario['fecha_prestamo'] > $formulario['fecha_devolucion']) {
-            $_SESSION['prestamo-error'] = "La fecha de préstamo no puede ser mayor a la fecha de devolución.";
-            redirigir('/index.php?action=prestamos');
-            return;
-        }
-
         $prestamoMod = new Prestamo();
-
         if ($prestamoMod->sacar($formulario)) {
             $libroMod->actualizarDisponibilidad($formulario['libro_id'], 0);
             $_SESSION['prestamo-mensaje'] = "Préstamo añadido correctamente.";

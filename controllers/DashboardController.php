@@ -21,7 +21,7 @@ class DashboardController {
         
         $prestamosDelUsuario = [];
         if (isset($_SESSION['user'])) {
-            $prestamosDelUsuario = (new Prestamo())->obtenerPrestamosPorUsuario($_SESSION['user']['id']);
+            $prestamosDelUsuario = (new Prestamo())->obtenerActivosUsuario($_SESSION['user']['id']);
         }
         require __DIR__ . '/../views/index.php';
     }

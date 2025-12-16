@@ -55,7 +55,10 @@ if (isset($libros['error'])) {
                         <span class="table-tit">Nº páginas</span>
                     </th>
                     <th>
-                        <span class="table-tit">&nbsp;</span>
+                        <span class="table-tit">Estado</span>
+                    </th>
+                    <th>
+                        <span class="table-tit">Acciones</span>
                     </th>
                 </tr>
             </thead>
@@ -71,28 +74,37 @@ if (isset($libros['error'])) {
                         echo "<td>" . $libro['año_publicacion'] . "</td>";
                         echo "<td>" . $libro['n_paginas'] . "</td>";
                         echo "<td>";
-                        echo "
-                                    <div class='button-libro'>
-                                        <form method='POST' action='" . BASE_PATH . "/index.php?action=modify-book'>
-                                            <input type='hidden' value='" . $libro['id'] . "' name='id'>
-                                            <input type='hidden' value='" . $libro['titulo'] . "' name='titulo'>
-                                            <input type='hidden' value='" . $libro['autor'] . "' name='autor'>
-                                            <input type='hidden' value='" . $libro['editorial'] . "' name='editorial'>
-                                            <input type='hidden' value='" . $libro['genero'] . "' name='genero'>
-                                            <input type='hidden' value='" . $libro['año_publicacion'] . "' name='año_publicacion'>
-                                            <input type='hidden' value='" . $libro['n_paginas'] . "' name='n_paginas'>
-                                            <input type='submit' value='Editar'>
-                                        </form>
-                                        <form method='POST' action='" . BASE_PATH . "/index.php?action=delete-book'>
-                                            <input type='hidden' name='id' value='" . $libro['id'] . "'>
-                                            <input type='submit' value='Borrar'>
-                                        </form>";
+                        if ($libro['prestamos_pendientes'] > 0) {
+                            echo "<span class='estado-en-uso'>En uso</span>";
+                        } else {
+                            echo "<span class='estado-disponible'>Disponible</span>";
+                        }
+                        echo"</td>";
+                        echo "<td>";
+                            echo "<div class='button-libro'>
+                                <form method='POST' action='" . BASE_PATH . "/index.php?action=modify-book'>
+                                    <input type='hidden' value='" . $libro['id'] . "' name='id'>
+                                    <input type='hidden' value='" . $libro['titulo'] . "' name='titulo'>
+                                    <input type='hidden' value='" . $libro['autor'] . "' name='autor'>
+                                    <input type='hidden' value='" . $libro['editorial'] . "' name='editorial'>
+                                    <input type='hidden' value='" . $libro['genero'] . "' name='genero'>
+                                    <input type='hidden' value='" . $libro['año_publicacion'] . "' name='año_publicacion'>
+                                    <input type='hidden' value='" . $libro['n_paginas'] . "' name='n_paginas'>
+                                    <input type='submit' value='Editar'>
+                                </form>";
+                            if ($libro['prestamos_pendientes'] == 0) {
+                                echo "<form method='POST' action='" . BASE_PATH . "/index.php?action=delete-book'>
+                                        <input type='hidden' name='id' value='" . $libro['id'] . "'>
+                                        <input type='submit' value='Borrar'>
+                                    </form>";
+                            }
+                            echo "</div>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
                     echo "<tr>
-                            <td colspan='7' class='error-bd'>
+                            <td colspan='8' class='error-bd'>
                                 No hay libros en la base de datos
                             </td>
                         </tr>";
@@ -101,7 +113,7 @@ if (isset($libros['error'])) {
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="7">&nbsp;</td>
+                    <td colspan="8">&nbsp;</td>
                 </tr>
             </tfoot>
         </table>

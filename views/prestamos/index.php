@@ -9,8 +9,30 @@ $prestamo_mensaje = $_SESSION['prestamo-mensaje'] ?? '';
 unset($_SESSION['prestamo-error']);
 unset($_SESSION['prestamo-mensaje']);
 
-$usuarioLoginPrestamos = $librosPrestados ?? [];
-$prestamosExistentes = $prestamos ?? [];
+function obtenerEstado($limite, $aviso, $real = null) {
+    $fechaComparar = $real ?? date('Y-m-d');
+
+    $segundosLimite = strtotime($limite);
+    $segundosComparar = strtotime($fechaComparar);
+
+    //  Calcular días en segundos
+    $diferenciaSegundos = $segundosComparar - $segundosLimite;
+    $dias = floor(abs($diferenciaSegundos) / 86400);
+
+    if ($fechaComparar > $limite) {
+        //  Se pasó de la fecha límite
+        return $real ? "Tarde ($dias días)" : "Límite superado ($dias días)";
+    } elseif ($fechaComparar > $aviso && !$real) {
+        //  Esta en el tiempo de aviso si no se ha devuelto aún
+        return "Aviso: Devolver pronto";
+    }
+    //  Lo devolvío a tiempo o le queda tiempo
+    return ($dias == 0) ? "Justo a tiempo" : "A tiempo ($dias días antes)";
+}
+
+$misPrestamos = $usuarioLoginPrestamos ?? [];
+$pendientes = $prestamosPendientes ?? [];
+$historial = $prestamosHistorial ?? [];
 ?>
 <section>
     <?php if (!empty($prestamo_error) || !empty($prestamo_mensaje)) { ?>
@@ -24,11 +46,11 @@ $prestamosExistentes = $prestamos ?? [];
     <?php } ?>
     <div class="data-div">
         <div class="user-data">
-            <?php if (!empty($usuarioLoginPrestamos)) { ?>
+            <?php if (!empty($misPrestamos)) { ?>
                 <h2>Libros prestados por el usuario '<span><?= $_SESSION['user']['nombre']; ?></span>'</h2>
                 <ul>
-                    <?php foreach ($usuarioLoginPrestamos as $librosUser) { ?>
-                        <li><?= $librosUser['titulo']; ?> - <small>Devolver antes de: <?= $librosUser['fecha_devolucion']; ?></small></li>
+                    <?php foreach ($misPrestamos as $mp) { ?>
+                        <li><?= $mp['titulo']; ?> - <small>Devolver antes de: <?= $mp['fecha_devolucion_limite']; ?></small></li>
                     <?php } ?>
                 </ul>
             <?php } else { ?>
@@ -45,6 +67,7 @@ $prestamosExistentes = $prestamos ?? [];
                             <th><label for="libro_id">Libro</label></th>
                             <th><label for="fecha_prestamo">Fecha de préstamo</label></th>
                             <th><label for="fecha_devolucion">Fecha de devolución</label></th>
+                            <th><label for="fecha_devolucion_limite">Fecha límite de devolución</label></th>
                             <th><label for="multa">Multa (€)</label></th>
                             <th>&nbsp;</th>
                         </tr>
@@ -54,17 +77,9 @@ $prestamosExistentes = $prestamos ?? [];
                             <td>
                                 <select id="usuario_id" name="usuario_id">
                                     <option value="">-- Elige un usuario --</option>
-                                    <?php
-                                    foreach ($usuariosActuales as $usuario) {
-                                        if ($_SESSION['user']['id'] === $usuario['id']) {
-                                    ?>
-                                            <option value="<?= $usuario['id']; ?>" selected><?= $usuario['nombre']; ?></option>
-                                        <?php   } else { ?>
-                                            <option value="<?= $usuario['id']; ?>"><?= $usuario['nombre']; ?></option>
-                                    <?php
-                                        }
-                                    }
-                                    ?>
+                                    <?php foreach ($usuariosActuales as $usuario) { ?>
+                                        <option value="<?= $usuario['id']; ?>" <?= ($_SESSION['user']['id'] == $usuario['id']) ? 'selected' : '' ?>><?= $usuario['nombre']; ?></option>
+                                    <?php } ?>
                                 </select>
                             </td>
                             <td>
@@ -82,7 +97,10 @@ $prestamosExistentes = $prestamos ?? [];
                                 <input type="date" name="fecha_devolucion" id="fecha_devolucion">
                             </td>
                             <td>
-                                <input type="number" name="multa" id="multa" step="0.01">
+                                <input type="date" name="fecha_devolucion_limite" id="fecha_devolucion_limite">
+                            </td>
+                            <td>
+                                <input type="number" name="multa" id="multa" step="0.01" min="0.01" max="99999.99">
                             </td>
                             <td>
                                 <div class="input-button">
@@ -96,27 +114,68 @@ $prestamosExistentes = $prestamos ?? [];
             </form>
         </div>
         <div class="prestamos-existentes">
-            <?php if (!empty($prestamosExistentes)) { ?>
+            <?php if (!empty($pendientes)) { ?>
                 <h2>Préstamos existentes</h2>
-                <?php foreach ($prestamosExistentes as $prestamo) { ?>
+                <?php foreach ($pendientes as $pend) {
+                    $estado = obtenerEstado(
+                        $pend['fecha_devolucion_limite'],
+                        $pend['fecha_devolucion']
+                    );
+                ?>
                     <div>
-                        <p>Usuario: <span><?= $prestamo['nombre_usuario']; ?></span></p>
-                        <p>Título del libro: <span><?= $prestamo['titulo_libro']; ?></span></p>
-                        <p>Fecha de préstamo: <span><?= $prestamo['fecha_prestamo']; ?></span></p>
-                        <p>Fecha de devolución: <span><?= $prestamo['fecha_devolucion']; ?></span></p>
-                        <p>Multa: <span><?= $prestamo['multa']; ?> €</span></p>
-                        <p>Estado: <span><?= ($prestamo['fecha_devolucion'] < date('Y-m-d')) ? "Retrasado" : "Prestado"; ?></span></p>
+                        <p>Usuario: <span><?= $pend['nombre_usuario']; ?></span></p>
+                        <p>Título del libro: <span><?= $pend['titulo_libro']; ?></span></p>
+                        <p>Fecha de préstamo: <span><?= $pend['fecha_prestamo']; ?></span></p>
+                        <p>Fecha de devolución: <span><?= $pend['fecha_devolucion_limite']; ?></span></p>
+                        <p>Multa: <span><?= $pend['multa']; ?> €</span></p>
+                        <p>Estado: <span><?= $estado; ?></span></p>
+
                         <form method="POST" action="<?= BASE_PATH ?>/index.php?action=devolver-libro">
-                            <input type="hidden" name="prestamo_id" value="<?= $prestamo['prestamo_id']; ?>">
-                            <input type="hidden" name="libro_id" value="<?= $prestamo['libro_id']; ?>">
+                            <input type="hidden" name="prestamo_id" value="<?= $pend['id']; ?>">
+                            <input type="hidden" name="libro_id" value="<?= $pend['libro_id']; ?>">
+                            <input type="hidden" name="multa" value="<?= $pend['multa']; ?>">
                             <input type="submit" value="Devolver libro">
                         </form>
                     </div>
                 <?php } ?>
             <?php } else { ?>
-                <p>No hay préstamos registrados en la base de datos.</p>
+                <p>No hay préstamos activos en este momento.</p>
             <?php } ?>
         </div>
+    </div>
+    <div class="devolucion-div">
+        <h2>Historial de devoluciones</h2>
+        <?php if (!empty($historial)) { ?>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Libro</th>
+                        <th>Usuario</th>
+                        <th>Fecha Límite</th>
+                        <th>Fecha Devolución</th>
+                        <th>Estado</th>
+                        <th>Multa/Fianza</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($historial as $h) { 
+                        // Calculamos estado comparando fecha real vs límite
+                        $estado = obtenerEstado($h['fecha_devolucion_limite'], $h['fecha_devolucion'], $h['fecha_devuelto']);
+                    ?>
+                        <tr>
+                            <td><?= $h['titulo_libro'] ?></td>
+                            <td><?= $h['nombre_usuario'] ?></td>
+                            <td><?= $h['fecha_devolucion_limite'] ?></td>
+                            <td><?= $h['fecha_devuelto'] ?></td>
+                            <td style="font-weight:bold;"><?= $estado; ?></td>
+                            <td><?= number_format($h['multa'], 2) . ' €' ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        <?php } else { ?>
+            <p>Aún no hay historial de devoluciones.</p>
+        <?php } ?>
     </div>
 </section>
 <?php

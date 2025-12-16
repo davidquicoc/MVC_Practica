@@ -15,7 +15,9 @@ class Libro {
     //  Devuelve todas las filas de la tabla libros o puede devolver un mensaje de error
     public function obtenerLibros() {
         try {
-            $result = $this->db->query("SELECT * FROM libro");
+            $result = $this->db->query("SELECT l.*,
+                                        (SELECT COUNT(*) FROM prestamo p WHERE p.libro_id = l.id AND devuelto = 0) as prestamos_pendientes
+                                        FROM libro l");
             if (!$result) {
                 return ['error' => $this->db->error];
             }

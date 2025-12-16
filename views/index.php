@@ -4,11 +4,11 @@ $tituloPagina = "Inicio | Biblioteca";
 $cssFile = "I";
 include __DIR__ . '/layout/header.php';
 
-$listadoLibros = $listaDeLibros ?? [];
+$libros = $listaDeLibros ?? [];
 
-$totalUsuarios = $totalUsuariosExistentes ?? 0;
-$totalLibros = $totalLibrosExistentes ?? 0;
-$totalPrestamos = $totalPrestamosExistentes ?? 0;
+$totUsuarios = $totalUsuariosExistentes ?? 0;
+$totLibros = $totalLibrosExistentes ?? 0;
+$totPrestamos = $totalPrestamosExistentes ?? 0;
 
 $numLibrosDisp = $totalLibrosDisponibles ?? 0;
 $numLibrosNoDisp = $totalLibrosNoDisponibles ?? 0;
@@ -20,17 +20,17 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
         <div class="left-stats">
             <div>
                 <h3>Usuarios registrados en la base de datos</h3>
-                <p><?= $totalUsuarios; ?></p>
+                <p><?= $totUsuarios; ?></p>
             </div>
             <div>
                 <h3>Total de préstamos existentes</h3>
-                <p><?= $totalPrestamos; ?></p>
+                <p><?= $totPrestamos; ?></p>
             </div>
         </div>
         <div class="right-stats">
             <div>
                 <h3>Total de libros en la base de datos</h3>
-                <p><?= $totalLibros; ?></p>
+                <p><?= $totLibros; ?></p>
             </div>
             <div>
                 <h3>Nº de libros sin prestar</h3>
@@ -41,14 +41,15 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
                 <p><?= $numLibrosNoDisp; ?></p>
             </div>
         </div>
+
         <div class="libros-stats">
             <h3>Estado de los libros</h3>
             <?php if (isset($libros['error'])) { ?>
                 <p class="error">Error al acceder a la base de datos:" <?= $libros['error']; ?> </p>
             <?php } ?>
-            <?php foreach ($listadoLibros as $libros) { ?>
+            <?php foreach ($libros as $libro) { ?>
                 <ul>
-                    <li class="lista-libros <?= ($libros['disponibilidad']) ? "disponible" : "no-disponible" ?>"><?= $libros['titulo'] ?></li>
+                    <li class="lista-libros <?= ($libro['disponibilidad']) ? "disponible" : "no-disponible" ?>"><?= $libro['titulo'] ?></li>
                 </ul>
             <?php } ?>
         </div>
@@ -56,15 +57,16 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
             <div class="prestamo-stats">
                 <h3>Preśtamos del usuario <?= $_SESSION['user']['nombre']; ?></h3>
                 <?php
-                foreach ($usuarioPrestamos as $prestamos) {
-                    $tieneMulta = date('Y-m-d') > $prestamos['fecha_devolucion'];
+                foreach ($usuarioPrestamos as $prestamo) {
+                    $limite = $prestamo['fecha_devolucion_limite'] ?? $prestamo['fecha_devolucion'];
+                    $tieneMulta = date('Y-m-d') > $limite;
                 ?>
                     <div class="prestamo-data <?= ($tieneMulta) ? "multa" : "sin_multa"; ?>">
-                        <p>Libro: <span><?= $prestamos['titulo']; ?></span></p>
-                        <p>Fecha de préstamo: <span><?= $prestamos['fecha_prestamo']; ?></span></p>
-                        <p>Fecha de devolución: <span><?= $prestamos['fecha_devolucion']; ?></span></p>
+                        <p>Libro: <span><?= $prestamo['titulo']; ?></span></p>
+                        <p>Fecha de préstamo: <span><?= $prestamo['fecha_prestamo']; ?></span></p>
+                        <p>Fecha límite: <span><?= $limite; ?></span></p>
                         <?php if ($tieneMulta) { ?>
-                            <p>Multa a pagar: <span><?= $prestamos['multa']; ?></span></p>
+                            <p>Multa a pagar: <span><?= $prestamo['multa']; ?></span></p>
                         <?php } ?>
                     </div>
                 <?php } ?>

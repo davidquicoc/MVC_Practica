@@ -241,6 +241,27 @@ tfoot tr td {
     justify-content: center;
 }
 
+.estado-en-uso, .estado-disponible {
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+}
+
+.estado-en-uso {
+    background: #eeb0b0;
+    color: #8a1f1d;
+    border: 1px solid #d48787;
+}
+
+.estado-disponible {
+    background: #b0eecf;
+    color: #1d8a52;
+    border: 1px solid #87d4a8;
+}
+
 .button-libro input[type="submit"] {
     background: #00000005;
     padding: 5px 10px;

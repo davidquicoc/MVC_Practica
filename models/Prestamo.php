@@ -18,30 +18,36 @@ class Prestamo {
         $libro_id = $data['libro_id'];
         $fecha_prestamo = $data['fecha_prestamo'];
         $fecha_devolucion = $data['fecha_devolucion'];
+        $fecha_devolucion_limite = $data['fecha_devolucion_limite'];
         $multa = $data['multa'];
         
-        return $this->db->query("INSERT INTO prestamo (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, multa) VALUES ('$usuario_id', '$libro_id', '$fecha_prestamo', '$fecha_devolucion', '$multa')");
+        return $this->db->query("INSERT INTO prestamo (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, fecha_devolucion_limite, multa) VALUES ('$usuario_id', '$libro_id', '$fecha_prestamo', '$fecha_devolucion', '$fecha_devolucion_limite', '$multa')");
     }
 
     //  Devuelve TRUE/FALSE si se eliminó el préstamo correctamente en la base de datos mediante su id
     public function devolver($id) {
-        return $this->db->query("DELETE FROM prestamo WHERE id = '$id'");
+        $fechaHoy = date('Y-m-d');
+        return $this->db->query("UPDATE prestamo
+                                 SET fecha_devuelto = '$fechaHoy',
+                                 devuelto = 1
+                                 WHERE id = '$id'");
     }
 
-    //  Devuelve un array asociativo con todos los préstamos o NULL si ocurre un error
-    public function listarPrestamos() {
-        $result = $this->db->query("SELECT p.id AS prestamo_id,
-                                    u.nombre AS nombre_usuario,
-                                    l.titulo AS titulo_libro,
-                                    l.id AS libro_id,
-                                    p.fecha_prestamo,
-                                    p.fecha_devolucion,
-                                    p.multa
+    public function obtenerPendientes() {
+        return $this->ejecutarQueryListado("WHERE p.devuelto = 0 ORDER BY p.fecha_devolucion_limite ASC");
+    }
+
+    public function obtenerHistorial() {
+        return $this->ejecutarQueryListado("WHERE p.devuelto = 1 ORDER BY p.fecha_devuelto DESC");
+    }
+
+    public function obtenerActivosUsuario($idUsuario) {
+        $result = $this->db->query("SELECT p.*, l.titulo
                                     FROM prestamo p
-                                    INNER JOIN usuario u ON p.usuario_id = u.id
-                                    INNER JOIN libro l ON p.libro_id = l.id");
-        if ($result) return $result->fetch_all(MYSQLI_ASSOC);
-        return [];
+                                    INNER JOIN libro l ON p.libro_id = l.id
+                                    WHERE p.usuario_id = '$idUsuario' AND p.devuelto = 0
+                                    ORDER BY p.fecha_devolucion_limite ASC");
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     //  Devuelve en número entero, el total de préstamos en la base de datos
@@ -56,16 +62,18 @@ class Prestamo {
 
     //  Devuelve en un array asociativo con todos los préstamos del usuario indicado por $id, o devuelve un array vacío 
     public function obtenerPrestamosPorUsuario($id) {
-        $result = $this->db->query("SELECT p.id AS prestamo_id,
-                                    p.fecha_prestamo,
-                                    p.fecha_devolucion,
-                                    p.multa,
-                                    l.titulo
+        return $this->ejecutarQueryListado("WHERE p.usuario_id = '$id' ORDER BY p.fecha_prestamo DESC");
+    }
+
+    private function ejecutarQueryListado($condicion) {
+        $result = $this->db->query("SELECT p.*,
+                                    u.nombre as nombre_usuario,
+                                    l.titulo as titulo_libro,
+                                    l.id as libro_id
                                     FROM prestamo p
-                                    INNER JOIN libro l ON p.libro_id = l.id
-                                    WHERE p.usuario_id = '$id'");
-        if ($result) return $result->fetch_all(MYSQLI_ASSOC);
-        return [];
+                                    INNER JOIN usuario u ON p.usuario_id = u.id
+                                    INNER JOIN libro l ON p.libro_id = l.id " . $condicion);
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 }
 ?>

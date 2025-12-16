@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: db
--- Tiempo de generación: 15-12-2025 a las 01:57:21
+-- Tiempo de generación: 16-12-2025 a las 03:18:37
 -- Versión del servidor: 8.0.44
 -- Versión de PHP: 8.3.26
 
@@ -53,7 +53,10 @@ CREATE TABLE IF NOT EXISTS `prestamo` (
   `libro_id` int NOT NULL,
   `fecha_prestamo` date NOT NULL,
   `fecha_devolucion` date NOT NULL,
-  `multa` decimal(5,2) NOT NULL DEFAULT '0.00',
+  `fecha_devolucion_limite` date NOT NULL,
+  `fecha_devuelto` date DEFAULT NULL,
+  `multa` decimal(7,2) NOT NULL,
+  `devuelto` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `usuario_id` (`usuario_id`),
   KEY `libro_id` (`libro_id`)
