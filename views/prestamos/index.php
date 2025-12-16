@@ -98,16 +98,16 @@ $historial = $prestamosHistorial ?? [];
                                 </select>
                             </td>
                             <td>
-                                <input type="date" name="fecha_prestamo" id="fecha_prestamo">
+                                <input type="date" name="fecha_prestamo" id="fecha_prestamo" required>
                             </td>
                             <td>
-                                <input type="date" name="fecha_devolucion" id="fecha_devolucion">
+                                <input type="date" name="fecha_devolucion" id="fecha_devolucion" required>
                             </td>
                             <td>
-                                <input type="date" name="fecha_devolucion_limite" id="fecha_devolucion_limite">
+                                <input type="date" name="fecha_devolucion_limite" id="fecha_devolucion_limite" required>
                             </td>
                             <td>
-                                <input type="number" name="multa" id="multa" step="0.01" min="0.01" max="99999.99">
+                                <input type="number" name="multa" id="multa" step="0.01" min="0.01" max="99999.99" required>
                             </td>
                             <td>
                                 <div class="input-button">
@@ -137,13 +137,35 @@ $historial = $prestamosHistorial ?? [];
                         <p>Fecha de devolución: <span><?= $pend['fecha_devolucion_limite']; ?></span></p>
                         <p>Multa: <span><?= $pend['multa']; ?> €</span></p>
                         <p>Estado: <span><?= $estado; ?></span></p>
-
+                        <?php
+                            $fechaHoy = date('Y-m-d');
+                            if ($pend['usuario_id'] == $_SESSION['user']['id']) {
+                                if ($fechaHoy >= $pend['fecha_devolucion']) { ?>
                         <form method="POST" action="<?= BASE_PATH ?>/index.php?action=devolver-libro">
                             <input type="hidden" name="prestamo_id" value="<?= $pend['id']; ?>">
                             <input type="hidden" name="libro_id" value="<?= $pend['libro_id']; ?>">
                             <input type="hidden" name="multa" value="<?= $pend['multa']; ?>">
                             <input type="submit" value="Devolver libro">
                         </form>
+                            <?php } else { ?>
+                                <div class="message-otro-usuario">
+                                    <p><span>Aún falta para que devuelvas el libro. (<?= $pend['fecha_devolucion']; ?>).</span></p>
+                                </div>
+                        <?php
+                                }
+                            } else {
+                                $usuarioAct = '';
+                                foreach ($usuariosActuales as $usuario) {
+                                    if ($pend['usuario_id'] === $usuario['id']) {
+                                        $usuarioAct = $usuario['nombre'];
+                                        break;
+                                    }
+                                }
+                        ?>  
+                        <div class="message-otro-usuario">
+                            <p><span>Está logueado con el usuario <?= $_SESSION['user']['nombre']; ?>. <?= empty($usuarioAct) ? '' : 'Debe iniciar sesión con el usuario ' . $usuarioAct; ?><span>.</p>
+                        </div>
+                        <?php }?>
                     </div>
                 <?php } ?>
             <?php } else { ?>
@@ -162,7 +184,7 @@ $historial = $prestamosHistorial ?? [];
                         <th>Fecha Límite</th>
                         <th>Fecha Devolución</th>
                         <th>Estado</th>
-                        <th>Multa/Fianza</th>
+                        <th>Multa</th>
                     </tr>
                 </thead>
                 <tbody>

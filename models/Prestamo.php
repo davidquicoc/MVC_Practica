@@ -67,9 +67,9 @@ class Prestamo {
     }
 
     //  Obtiene todos los préstamos de un usuario (activos e históricos)
-    public function obtenerPrestamosPorUsuario($id) {
+    /*public function obtenerPrestamosPorUsuario($id) {
         return $this->ejecutarQueryListado("WHERE p.usuario_id = '$id' ORDER BY p.fecha_prestamo DESC");
-    }
+    }*/
 
     //  Método privado para evitar repetir la query SQL
     //  Hace JOINS necesarios para traer el nombre del usuario y el título del libro en lugar de solo los IDs numéricos

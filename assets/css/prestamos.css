@@ -300,6 +300,7 @@ tbody tr td:nth-child(6) input {
     flex-wrap: wrap;
     align-items: center;
     justify-content: space-evenly;
+    text-align: center;
 }
 
 .prestamos-existentes h2 {
@@ -313,6 +314,7 @@ tbody tr td:nth-child(6) input {
     background: #00000011;
     padding: 12.5px;
     display: flex;
+    width: 35%;
     border-radius: 10px;
     flex-direction: column;
     align-items: center;
@@ -344,6 +346,20 @@ tbody tr td:nth-child(6) input {
     background: #9a9a9a;
     border: 1px solid #bab5b5;
     border-radius: 10px;
+}
+
+div.message-otro-usuario {
+    background: #00000022;
+    border-radius: 15px;
+    width: 100%;
+    margin: 5px 0;
+    padding: 5px;
+    gap: 0;
+}
+
+div.message-otro-usuario p {
+    font-size: 1.24rem;
+    text-align: center;
 }
 
 .devolucion-div {

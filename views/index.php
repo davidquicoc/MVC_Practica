@@ -59,7 +59,7 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
                 <?php
                 foreach ($usuarioPrestamos as $prestamo) {
                     //  Definir la fecha límite. Si no existe, se usa la fecha de devolución normal
-                    $limite = $prestamo['fecha_devolucion_limite'] ?? $prestamo['fecha_devolucion'];
+                    $limite = $prestamo['fecha_devolucion_limite'] ?? '';
                     //  Comparar hoy con la fecha límite para saber si hay retraso                    
                     $tieneMulta = date('Y-m-d') > $limite;
                 ?>

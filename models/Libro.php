@@ -16,7 +16,8 @@ class Libro {
     public function obtenerLibros() {
         try {
             $result = $this->db->query("SELECT l.*,
-                                        (SELECT COUNT(*) FROM prestamo p WHERE p.libro_id = l.id AND devuelto = 0) as prestamos_pendientes
+                                        (SELECT COUNT(*) FROM prestamo p WHERE p.libro_id = l.id AND devuelto = 0) AS prestamos_pendientes,
+                                        (SELECT COUNT(*) FROM prestamo p WHERE p.libro_id = l.id AND devuelto = 1) AS prestamos_devueltos
                                         FROM libro l");
             if (!$result) {
                 return ['error' => $this->db->error];

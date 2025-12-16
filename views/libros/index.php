@@ -97,10 +97,11 @@ if (isset($libros['error'])) {
                                     <input type='submit' value='Editar'>
                                 </form>";
                             //  Permitir el borrar si el libro no tiene préstamos pendientes
+                            $esDevuelto = $libro['prestamos_devueltos'] > 0 ? "Borrar entero" : "Borrar";
                             if ($libro['prestamos_pendientes'] == 0) {
                                 echo "<form method='POST' action='" . BASE_PATH . "/index.php?action=delete-book'>
                                         <input type='hidden' name='id' value='" . $libro['id'] . "'>
-                                        <input type='submit' value='Borrar'>
+                                        <input type='submit' value='$esDevuelto'>
                                     </form>";
                             }
                             //  Si estña en uso, no se muestra el botón de borrar
@@ -120,7 +121,11 @@ if (isset($libros['error'])) {
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="8">&nbsp;</td>
+                    <td colspan="8">
+                        <p><strong>"Borrar entero"</strong> borra tanto el libro como el préstamo devuelto</p>
+                        <p><strong>"Borrar"</strong> borra solo el libro</p>
+                        <p>Si solo aparece el botón <strong>"Editar"</strong>, el libro esta asociado a un préstamo</p>  
+                    </td>
                 </tr>
             </tfoot>
         </table>
