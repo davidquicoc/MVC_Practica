@@ -9,24 +9,31 @@ $prestamo_mensaje = $_SESSION['prestamo-mensaje'] ?? '';
 unset($_SESSION['prestamo-error']);
 unset($_SESSION['prestamo-mensaje']);
 
+//  Devuele un string con el texto a mostrar
 function obtenerEstado($limite, $aviso, $real = null) {
+    //  Si pasamos la fecha real, usamos esa (historial). Si no, usamos HOY (pendientes).
     $fechaComparar = $real ?? date('Y-m-d');
 
+    //  Convertir a segundos para restar
     $segundosLimite = strtotime($limite);
     $segundosComparar = strtotime($fechaComparar);
 
-    //  Calcular días en segundos
+    //  Calcular la diferencia en días (86400 seg = 1 día)
     $diferenciaSegundos = $segundosComparar - $segundosLimite;
     $dias = floor(abs($diferenciaSegundos) / 86400);
 
+    //  Le fecha actual (o devolución) es mayor al límite permitido
     if ($fechaComparar > $limite) {
-        //  Se pasó de la fecha límite
+        //  Si $real tiene valor (TRUE) -> Es historial, el libro se devolvío tarde
+        //  Si $real es null (FALSE -> Está pendiente, el límite está superado ahora mismo
         return $real ? "Tarde ($dias días)" : "Límite superado ($dias días)";
     } elseif ($fechaComparar > $aviso && !$real) {
         //  Esta en el tiempo de aviso si no se ha devuelto aún
         return "Aviso: Devolver pronto";
     }
-    //  Lo devolvío a tiempo o le queda tiempo
+    //  No se pasó del límite
+    //  Si $dias = 0 (TRUE) -> Se devuelve justo en la fecha límite
+    //  Si $dias > 0 (FALSE) -> Se devuelve con antelación.
     return ($dias == 0) ? "Justo a tiempo" : "A tiempo ($dias días antes)";
 }
 
@@ -117,6 +124,7 @@ $historial = $prestamosHistorial ?? [];
             <?php if (!empty($pendientes)) { ?>
                 <h2>Préstamos existentes</h2>
                 <?php foreach ($pendientes as $pend) {
+                    //  Se calcula el estado con la fecha de hoy y el límite
                     $estado = obtenerEstado(
                         $pend['fecha_devolucion_limite'],
                         $pend['fecha_devolucion']
@@ -162,7 +170,7 @@ $historial = $prestamosHistorial ?? [];
                         // Calculamos estado comparando fecha real vs límite
                         $estado = obtenerEstado($h['fecha_devolucion_limite'], $h['fecha_devolucion'], $h['fecha_devuelto']);
                     ?>
-                        <tr>
+                        <tr class="fila-normal">
                             <td><?= $h['titulo_libro'] ?></td>
                             <td><?= $h['nombre_usuario'] ?></td>
                             <td><?= $h['fecha_devolucion_limite'] ?></td>

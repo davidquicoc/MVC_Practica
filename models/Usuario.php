@@ -48,9 +48,11 @@ class Usuario {
         return 0;
     }
 
-    //  Devuelve el id y nombre de todos los usuarios de la base de datos
+    //  Devuelve el ID y nombre de los usuarios en la BD
+    //  Se usa en el <select> de formulario de préstamos
     public function obtenerIdNombreDeLosUsuarios() {
-        return $this->db->query("SELECT id, nombre FROM usuario");
+        $result = $this->db->query("SELECT id, nombre FROM usuario");
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 }
 ?>

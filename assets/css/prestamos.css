@@ -247,6 +247,10 @@ tbody tr td:last-child {
     background: #b4d0da;
 }
 
+.fila-normal td:last-child {
+    background: #70acb1;
+}
+
 tbody tr:last-child td {
     border-bottom: none;
 }

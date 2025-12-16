@@ -2,8 +2,7 @@
 $tituloPagina = "Libros | Biblioteca";
 $cssFile = "L";
 include __DIR__ . '/../layout/header.php';
-?>
-<?php
+
 $libro_mensaje = $_SESSION['libro-mensaje'] ?? '';
 $libro_error = $_SESSION['libro-error'] ?? '';
 
@@ -13,6 +12,7 @@ unset($_SESSION['libro-error']);
 $libros = $listaLibros ?? [];
 $hayLibros = !empty($libros);
 
+//  SI hay un error de conexión a la BD, se muestra el mensaje de error y se detiene la ejecución
 if (isset($libros['error'])) {
     echo "<p class='libros-error-text'>Error al acceder a la base de datos:" . $libros['error'] . "</p>";
     include __DIR__ . '/../layout/footer.php';
@@ -65,6 +65,7 @@ if (isset($libros['error'])) {
             <tbody>
                 <?php
                 if ($hayLibros) {
+                    //  Recorre cada libro de la BD
                     foreach ($libros as $libro) {
                         echo "<tr>";
                         echo "<td> " . $libro['titulo'] . "</td>";
@@ -74,6 +75,8 @@ if (isset($libros['error'])) {
                         echo "<td>" . $libro['año_publicacion'] . "</td>";
                         echo "<td>" . $libro['n_paginas'] . "</td>";
                         echo "<td>";
+                        //  Se usa el campo calculado 'prestamos_pendientes' que viene del modelo
+                        //  Si es > 0 significa que alguien tiene el libro
                         if ($libro['prestamos_pendientes'] > 0) {
                             echo "<span class='estado-en-uso'>En uso</span>";
                         } else {
@@ -81,8 +84,9 @@ if (isset($libros['error'])) {
                         }
                         echo"</td>";
                         echo "<td>";
-                            echo "<div class='button-libro'>
-                                <form method='POST' action='" . BASE_PATH . "/index.php?action=modify-book'>
+                            echo "<div class='button-libro'>";
+                            //  Botón editar (siempre visible)
+                            echo "<form method='POST' action='" . BASE_PATH . "/index.php?action=modify-book'>
                                     <input type='hidden' value='" . $libro['id'] . "' name='id'>
                                     <input type='hidden' value='" . $libro['titulo'] . "' name='titulo'>
                                     <input type='hidden' value='" . $libro['autor'] . "' name='autor'>
@@ -92,17 +96,20 @@ if (isset($libros['error'])) {
                                     <input type='hidden' value='" . $libro['n_paginas'] . "' name='n_paginas'>
                                     <input type='submit' value='Editar'>
                                 </form>";
+                            //  Permitir el borrar si el libro no tiene préstamos pendientes
                             if ($libro['prestamos_pendientes'] == 0) {
                                 echo "<form method='POST' action='" . BASE_PATH . "/index.php?action=delete-book'>
                                         <input type='hidden' name='id' value='" . $libro['id'] . "'>
                                         <input type='submit' value='Borrar'>
                                     </form>";
                             }
+                            //  Si estña en uso, no se muestra el botón de borrar
                             echo "</div>";
                         echo "</td>";
                         echo "</tr>";
                     }
                 } else {
+                    //  Si no hay libros, mostrar una fila vacía con un mensaje
                     echo "<tr>
                             <td colspan='8' class='error-bd'>
                                 No hay libros en la base de datos

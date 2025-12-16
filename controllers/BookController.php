@@ -40,6 +40,7 @@ class BookController {
             'n_paginas' => $_POST['n_paginas'] ?? ''
         ];
 
+        //  Validar que no estén vacíos 
         if (empty($formulario['titulo']) || empty($formulario['autor']) ||
             empty($formulario['editorial']) || empty($formulario['genero']) ||
             empty($formulario['año_publicacion']) || empty($formulario['n_paginas'])
@@ -49,12 +50,14 @@ class BookController {
             return;
         }
 
+        //  Año de publicación y nº páginas que sean números
         if (!is_numeric($formulario['año_publicacion']) || !is_numeric($formulario['n_paginas'])) {
             $_SESSION['libro-error'] = "El campo de 'año de publicación' y de 'número de páginas' debe ser de valor numérico.";
             redirigir('/index.php?action=libros');
             return;
         }
         
+        //  Llamada al modelo
         $libroMod = new Libro();
         if ($libroMod->añadirLibro($formulario)) {
             $_SESSION['libro-mensaje'] = "Libro creado correctamente.";
@@ -79,6 +82,7 @@ class BookController {
         $libroMod = new Libro();
         $resultado = $libroMod->modificarLibro($formulario);
 
+        //  Campos vacíos
         if (empty($formulario['titulo']) || empty($formulario['autor']) ||
             empty($formulario['editorial']) || empty($formulario['genero']) ||
             empty($formulario['año_publicacion']) || empty($formulario['n_paginas'])
@@ -88,12 +92,14 @@ class BookController {
             return;
         }
         
+        //  Es en formato de número
         if (!is_numeric($formulario['año_publicacion']) || !is_numeric($formulario['n_paginas'])) {
             $_SESSION['libro-error'] = "El campo de 'año de publicación' o/y de 'número de páginas' debe ser de valor numérico.";
             redirigir('/index.php?action=libros');
             return;
         }
 
+        //  Mensajes según el resultado del modelo (0, 1, 2)
         if ($resultado == 2) {
             $_SESSION['libro-mensaje'] = "Libro '" . $formulario['titulo'] . "' modificado correctamente.";
         } elseif ($resultado == 1) {

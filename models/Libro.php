@@ -12,7 +12,7 @@ class Libro {
         $this->db = $conn;
     }
 
-    //  Devuelve todas las filas de la tabla libros o puede devolver un mensaje de error
+    //  Devuelve todos los datos del libro y cuenta cuántos préstamos sin devolver tiene
     public function obtenerLibros() {
         try {
             $result = $this->db->query("SELECT l.*,
@@ -21,6 +21,7 @@ class Libro {
             if (!$result) {
                 return ['error' => $this->db->error];
             }
+            //  Array asociativo con todas las filas
             return $result->fetch_all(MYSQLI_ASSOC);
         } catch (mysqli_sql_exception $e) {
             return ['error' => $e->getMessage()];
@@ -39,10 +40,8 @@ class Libro {
         return $this->db->query("INSERT INTO libro (titulo, autor, editorial, genero, año_publicacion, n_paginas) VALUES ('$titulo', '$autor', '$editorial', '$genero', '$año_publicacion', '$n_paginas')");
     }
 
-    //  Devuelve
-    //  2 si el libro se modificó
-    //  1 si no hubo ningún cambio
-    //  0 si ocurrió un error
+    //  Actualiza un libro
+    //  Retorna: 2 (Modificado), 1 (Sin cambios), 0 (Error)
     public function modificarLibro(array $data) {
         $id = $data['id'];
         $titulo = $data['titulo'];
@@ -52,8 +51,10 @@ class Libro {
         $año_publicacion = $data['año_publicacion'];
         $n_paginas = $data['n_paginas'];
 
+        //  Se verifica si los datos son diferentes a los que ya existen
         $comparacion = (new Libro())->compararLibro($data);
 
+        //  Hay diferencias, se actualiza el libro 
         if ($comparacion == 2) {
             $result = $this->db->query("UPDATE libro
                 SET titulo = '$titulo',
@@ -64,6 +65,7 @@ class Libro {
                 n_paginas = '$n_paginas' WHERE id = '$id'");
                 return $result ? 2 : 0;
         }
+        //  Los datos del libro son idénticos
         if ($comparacion == 1) return 1;
         return 0;
     }
@@ -84,6 +86,7 @@ class Libro {
     }
 
     //  Devuelve en número entero, el total de libros en la base de datos según la disponibilidad pasada por el parámetro
+    //  (1 = Disponible, 0 = Prestado)
     public function contarLibrosSegunDisponibilidad($numDisponibilidad) {
         $result = $this->db->query("SELECT COUNT(*) as total FROM libro WHERE disponibilidad = $numDisponibilidad");
         if ($result) {
@@ -93,9 +96,11 @@ class Libro {
         return 0;
     }
 
-    //  Devuelve el id y titulo de todos los libros disponibles de la base de datos
+    //  Devuelve el ID y titulo de los libros disponibles
+    //  Se usa en el <select> de formulario de préstamos
     public function obtenerIdTituloDeLibrosDisponibles() {
-        return $this->db->query("SELECT id, titulo FROM libro WHERE disponibilidad = 1");
+        $result = $this->db->query("SELECT id, titulo FROM libro WHERE disponibilidad = 1");
+        return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
     //  Devuelve TRUE/FALSE si se actualizó la disponibilidad de un libro a la base de datos
@@ -104,10 +109,8 @@ class Libro {
         return $this->db->query("UPDATE libro SET disponibilidad = $estado WHERE id = $id");
     }
 
-    //  Devuelve:
-    //  1 si los datos del libro coinciden con los pasados por el parámetro $data
-    //  2 si existen diferencias
-    //  0 si no existe el libro o hubo un error
+    //  Función que verifica si se va a realizar un UPDATE
+    //  Compara los datos del formulario $data con los de la BD
     private function compararLibro(array $data)  {
         $idData = $data['id'];
         $result = $this->db->query("SELECT * FROM libro WHERE id = $idData");
@@ -117,12 +120,12 @@ class Libro {
                 && $fila['editorial'] == $data['editorial'] && $fila['genero'] == $data['genero']
                 && $fila['año_publicacion'] == $data['año_publicacion'] && $fila['n_paginas'] == $data['n_paginas']
                 ) {
-                return 1;
+                return 1;   //  Iguales
             } else {
-                return 2;
+                return 2;   //  Distintos
             }
         }
-        return 0;
+        return 0;   //  No existe
     }
 }
 ?>

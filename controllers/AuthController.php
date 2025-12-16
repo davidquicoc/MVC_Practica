@@ -25,16 +25,20 @@ class AuthController {
         $email = $_POST['email'] ?? '';
         $contraseña = $_POST['contraseña'] ?? '';
         
+        //  Validación básica
         if (empty($email) || empty($contraseña)) {
             $_SESSION['error'] = "Campo email o/y contraseña vacíos.";
             redirigir('/index.php?action=login');
             return;
         }
 
+        //  Buscar usuario en la BD
         $usuarioMod = new Usuario();
         $usuario = $usuarioMod->obtenerUsuarioPorEmail($email);
 
+        //  Verificar contraseña encriptada
         if ($usuario != null && password_verify($contraseña, $usuario['contraseña'])) {
+            //  Guardar datos en sesión
             $_SESSION['user'] = $usuario;
             $_SESSION['user']['nombre'] = $usuario['nombre'];
             redirigir('/index.php');
@@ -54,6 +58,7 @@ class AuthController {
             'contraseña' => $_POST['contraseña'] ?? ''
         ];
 
+        //  Validaciones de campos vacíos
         if (empty($formulario['dni']) || empty($formulario['nombre']) || empty($formulario['apellido']) || empty($formulario['email']) || empty($formulario['contraseña'])) {
             $_SESSION['error'] = "Hay algunos campos vacíos del formulario.";
             redirigir('/index.php?action=register');
@@ -62,12 +67,14 @@ class AuthController {
         
         $usuarioMod = new Usuario();
 
+        //  Verificar si el email ya existe para no duplicar
         if ($usuarioMod->existeEmail($formulario['email'])) {
             $_SESSION['error'] = "Correo ya asignado a un usuario.";
             redirigir('/index.php?action=register');
             return;
         }
 
+        //  Crear usuario
         if ($usuarioMod->crearUsuario($formulario)) {
             $_SESSION['register-confirm'] = "Registro confirmado.";
             redirigir('/index.php?action=login');
@@ -83,7 +90,5 @@ class AuthController {
         session_destroy();
         redirigir('/index.php');
     }
-
 }
-
 ?>

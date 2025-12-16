@@ -58,7 +58,9 @@ $usuarioPrestamos = $prestamosDelUsuario ?? [];
                 <h3>Preśtamos del usuario <?= $_SESSION['user']['nombre']; ?></h3>
                 <?php
                 foreach ($usuarioPrestamos as $prestamo) {
+                    //  Definir la fecha límite. Si no existe, se usa la fecha de devolución normal
                     $limite = $prestamo['fecha_devolucion_limite'] ?? $prestamo['fecha_devolucion'];
+                    //  Comparar hoy con la fecha límite para saber si hay retraso                    
                     $tieneMulta = date('Y-m-d') > $limite;
                 ?>
                     <div class="prestamo-data <?= ($tieneMulta) ? "multa" : "sin_multa"; ?>">

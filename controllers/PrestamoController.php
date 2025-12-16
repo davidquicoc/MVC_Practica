@@ -10,10 +10,13 @@ class PrestamoController {
     public function mostrarIndexPrestamos() {
         require_login();
 
+        //  Guardar en variables para select del formulario de préstamo
         $librosDisponibles = (new Libro())->obtenerIdTituloDeLibrosDisponibles();
         $usuariosActuales = (new Usuario())->obtenerIdNombreDeLosUsuarios();
 
+        //  Guardar en un array los préstamos pendientes
         $usuarioLoginPrestamos = (new Prestamo())->obtenerActivosUsuario($_SESSION['user']['id']);
+        //  Guardar los préstamos pendientes a devolver y préstamos ya devueltos
         $prestamosPendientes = (new Prestamo())->obtenerPendientes();
         $prestamosHistorial = (new Prestamo())->obtenerHistorial();
 
@@ -24,6 +27,7 @@ class PrestamoController {
     public function sacarLibro() {
         $multaInput = $_POST['multa'] ?? '';
 
+        //  Validación de multa
         if (!is_numeric($multaInput)) {
             $_SESSION['prestamo-error'] = "El valor de la multa debe ser numérico.";
             redirigir('/index.php?action=prestamos');
@@ -33,7 +37,7 @@ class PrestamoController {
         $multa = floatval($multaInput);
 
         if ($multa <= 0) {
-            $_SESSION['prestamo-error'] = "La multa debe ser un valo mayor a 0.";
+            $_SESSION['prestamo-error'] = "La multa no debe ser en valor negativo.";
             redirigir('/index.php?action=prestamos');
             return;
         }
@@ -53,6 +57,7 @@ class PrestamoController {
             'multa' => $multa
         ];
 
+        //  Validaciones de campos vacíos
         if (empty($formulario['usuario_id']) || empty($formulario['libro_id']) || 
             empty($formulario['fecha_prestamo']) || empty($formulario['fecha_devolucion']) || 
             empty($formulario['fecha_devolucion_limite'])) {
@@ -62,6 +67,7 @@ class PrestamoController {
             return;
         }
 
+        //  Validaciones lógicas de fechas
         if ($formulario['fecha_prestamo'] > $formulario['fecha_devolucion']) {
             $_SESSION['prestamo-error'] = "La fecha de préstamo no puede ser mayor a la fecha de devolución.";
             redirigir('/index.php?action=prestamos');
@@ -74,6 +80,7 @@ class PrestamoController {
             return;
         }
 
+        //  Verificar disponibilidad
         $libroMod = new Libro();
         $comprobacionLibro = $libroMod->obtenerIdTituloDeLibrosDisponibles();
         $esDisponible = false;
@@ -91,8 +98,10 @@ class PrestamoController {
             return;
         }
 
+        //  Realizar préstamo
         $prestamoMod = new Prestamo();
         if ($prestamoMod->sacar($formulario)) {
+            //  Marcar libro como no disponible (0)
             $libroMod->actualizarDisponibilidad($formulario['libro_id'], 0);
             $_SESSION['prestamo-mensaje'] = "Préstamo añadido correctamente.";
         } else {
@@ -108,6 +117,7 @@ class PrestamoController {
 
         $libroMod = new Libro();
 
+        //  Verificar que el libro no esté disponible (que esté prestado)
         $comprobacionLibro = $libroMod->obtenerIdTituloDeLibrosDisponibles();
         $estaDisponible = false;
 
@@ -124,9 +134,10 @@ class PrestamoController {
             return;
         }
 
+        //  Ejecutar devolución
         $prestamoMod = new Prestamo();
-
         if ($prestamoMod->devolver($prestamo_id)) {
+            //  Liberar el libro (disponibilidad = 1)
             $libroMod->actualizarDisponibilidad($libro_id, 1);
             $_SESSION['prestamo-mensaje'] = "Libro devuelto correctamente.";
         } else {

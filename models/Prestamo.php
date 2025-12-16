@@ -13,6 +13,7 @@ class Prestamo {
     }
 
     //  Devuelve TRUE/FALSE si se insertó el préstamo a la base de datos con sus datos pasados en $data
+    //  Por defecto 'devuelto' será 0 en la BD o null
     public function sacar(array $data) {
         $usuario_id = $data['usuario_id'];
         $libro_id = $data['libro_id'];
@@ -24,7 +25,8 @@ class Prestamo {
         return $this->db->query("INSERT INTO prestamo (usuario_id, libro_id, fecha_prestamo, fecha_devolucion, fecha_devolucion_limite, multa) VALUES ('$usuario_id', '$libro_id', '$fecha_prestamo', '$fecha_devolucion', '$fecha_devolucion_limite', '$multa')");
     }
 
-    //  Devuelve TRUE/FALSE si se eliminó el préstamo correctamente en la base de datos mediante su id
+    //  Devuelve TRUE/FALSE si se devolvío el libro
+    //  Se registra la fecha real y se actualiza el boolean devuelto
     public function devolver($id) {
         $fechaHoy = date('Y-m-d');
         return $this->db->query("UPDATE prestamo
@@ -33,14 +35,18 @@ class Prestamo {
                                  WHERE id = '$id'");
     }
 
+    //  Obtiene préstamos activos (no devueltos) ordenados por la fecha_devolucion_limite
     public function obtenerPendientes() {
         return $this->ejecutarQueryListado("WHERE p.devuelto = 0 ORDER BY p.fecha_devolucion_limite ASC");
     }
 
+    //  Obtiene préstamos pasados (devueltos)
     public function obtenerHistorial() {
         return $this->ejecutarQueryListado("WHERE p.devuelto = 1 ORDER BY p.fecha_devuelto DESC");
     }
 
+    //  Obtiene los préstamos activos de un usuario específico
+    //  Realiza un JOIN con 'libro' para mostrar el título en el Dashboard
     public function obtenerActivosUsuario($idUsuario) {
         $result = $this->db->query("SELECT p.*, l.titulo
                                     FROM prestamo p
@@ -50,7 +56,7 @@ class Prestamo {
         return $result ? $result->fetch_all(MYSQLI_ASSOC) : [];
     }
 
-    //  Devuelve en número entero, el total de préstamos en la base de datos
+    //  Devuelve el total de préstamos
     public function contarPrestamos() {
         $result = $this->db->query("SELECT COUNT(*) AS 'total' FROM prestamo");
         if ($result) {
@@ -60,11 +66,13 @@ class Prestamo {
         return 0;
     }
 
-    //  Devuelve en un array asociativo con todos los préstamos del usuario indicado por $id, o devuelve un array vacío 
+    //  Obtiene todos los préstamos de un usuario (activos e históricos)
     public function obtenerPrestamosPorUsuario($id) {
         return $this->ejecutarQueryListado("WHERE p.usuario_id = '$id' ORDER BY p.fecha_prestamo DESC");
     }
 
+    //  Método privado para evitar repetir la query SQL
+    //  Hace JOINS necesarios para traer el nombre del usuario y el título del libro en lugar de solo los IDs numéricos
     private function ejecutarQueryListado($condicion) {
         $result = $this->db->query("SELECT p.*,
                                     u.nombre as nombre_usuario,
