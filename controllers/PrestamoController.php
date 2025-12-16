@@ -68,14 +68,28 @@ class PrestamoController {
         }
 
         //  Validaciones lógicas de fechas
+        $fechaHoy = date('Y-m-d');
+        
         if ($formulario['fecha_prestamo'] > $formulario['fecha_devolucion']) {
             $_SESSION['prestamo-error'] = "La fecha de préstamo no puede ser mayor a la fecha de devolución.";
             redirigir('/index.php?action=prestamos');
             return;
         }
 
+        if ($formulario['fecha_prestamo'] > $formulario['fecha_devolucion_limite']) {
+            $_SESSION['prestamo-error'] = "La fecha de préstamo no puede ser mayor a la fecha límite de devolución.";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
+
         if ($formulario['fecha_devolucion'] > $formulario['fecha_devolucion_limite']) {
-            $_SESSION['prestamo-error'] = "La fecha de aviso no puede ser mayor a la fecha límite.";
+            $_SESSION['prestamo-error'] = "La fecha de devolución no puede ser mayor a la fecha límite de devolución.";
+            redirigir('/index.php?action=prestamos');
+            return;
+        }
+
+        if ($formulario['fecha_devolucion_limite'] < $fechaHoy) {
+            $_SESSION['prestamo-error'] = "La fecha límite de devolución (" . $formulario['fecha_devolucion_limite'] . ") no puede ser menor a la fecha actual (" . $fechaHoy . ").";
             redirigir('/index.php?action=prestamos');
             return;
         }

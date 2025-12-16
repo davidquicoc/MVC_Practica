@@ -178,6 +178,7 @@ section {
 
 .user-data ul {
     list-style: none;
+    text-align: center;
 }
 
 .user-data ul li {

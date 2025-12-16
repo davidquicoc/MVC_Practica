@@ -29,7 +29,7 @@ function obtenerEstado($limite, $aviso, $real = null) {
         return $real ? "Tarde ($dias días)" : "Límite superado ($dias días)";
     } elseif ($fechaComparar > $aviso && !$real) {
         //  Esta en el tiempo de aviso si no se ha devuelto aún
-        return "Aviso: Devolver pronto";
+        return "Devolver pronto";
     }
     //  No se pasó del límite
     //  Si $dias = 0 (TRUE) -> Se devuelve justo en la fecha límite
@@ -134,7 +134,8 @@ $historial = $prestamosHistorial ?? [];
                         <p>Usuario: <span><?= $pend['nombre_usuario']; ?></span></p>
                         <p>Título del libro: <span><?= $pend['titulo_libro']; ?></span></p>
                         <p>Fecha de préstamo: <span><?= $pend['fecha_prestamo']; ?></span></p>
-                        <p>Fecha de devolución: <span><?= $pend['fecha_devolucion_limite']; ?></span></p>
+                        <p>Fecha de devolución: <span><?= $pend['fecha_devolucion']; ?></span></p>
+                        <p>Fecha límite de devolución: <span><?= $pend['fecha_devolucion_limite']; ?></span></p>
                         <p>Multa: <span><?= $pend['multa']; ?> €</span></p>
                         <p>Estado: <span><?= $estado; ?></span></p>
                         <?php
@@ -181,8 +182,8 @@ $historial = $prestamosHistorial ?? [];
                     <tr>
                         <th>Libro</th>
                         <th>Usuario</th>
-                        <th>Fecha Límite</th>
-                        <th>Fecha Devolución</th>
+                        <th>Fecha límite de devolución</th>
+                        <th>Fecha de devolución</th>
                         <th>Estado</th>
                         <th>Multa</th>
                     </tr>
