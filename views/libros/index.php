@@ -122,9 +122,13 @@ if (isset($libros['error'])) {
             <tfoot>
                 <tr>
                     <td colspan="8">
+                        <?php if ($hayLibros) { ?>
                         <p><strong>"Borrar entero"</strong> borra tanto el libro como el préstamo devuelto</p>
                         <p><strong>"Borrar"</strong> borra solo el libro</p>
-                        <p>Si solo aparece el botón <strong>"Editar"</strong>, el libro esta asociado a un préstamo</p>  
+                        <p>Si solo aparece el botón <strong>"Editar"</strong>, el libro esta asociado a un préstamo</p>
+                        <?php } else { ?>
+                        &nbsp;
+                        <?php } ?>
                     </td>
                 </tr>
             </tfoot>
