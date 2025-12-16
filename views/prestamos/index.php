@@ -26,15 +26,24 @@ function obtenerEstado($limite, $aviso, $real = null) {
     if ($fechaComparar > $limite) {
         //  Si $real tiene valor (TRUE) -> Es historial, el libro se devolvío tarde
         //  Si $real es null (FALSE -> Está pendiente, el límite está superado ahora mismo
-        return $real ? "Tarde ($dias días)" : "Límite superado ($dias días)";
+        return [
+            'mensaje' => $real ? "Tarde ($dias días)" : "Límite superado ($dias días)",
+            'multa' => 2
+        ];
     } elseif ($fechaComparar > $aviso && !$real) {
         //  Esta en el tiempo de aviso si no se ha devuelto aún
-        return "Devolver pronto";
+        return [
+            'mensaje' => "Devolver pronto",
+            'multa'=> null
+        ];
     }
     //  No se pasó del límite
     //  Si $dias = 0 (TRUE) -> Se devuelve justo en la fecha límite
     //  Si $dias > 0 (FALSE) -> Se devuelve con antelación.
-    return ($dias == 0) ? "Justo a tiempo" : "A tiempo ($dias días antes)";
+    return [
+        'mensaje' => ($dias == 0) ? "Justo a tiempo" : "A tiempo ($dias días antes)",
+        'multa' => 1
+    ];
 }
 
 $misPrestamos = $usuarioLoginPrestamos ?? [];
@@ -137,7 +146,7 @@ $historial = $prestamosHistorial ?? [];
                         <p>Fecha de devolución: <span><?= $pend['fecha_devolucion']; ?></span></p>
                         <p>Fecha límite de devolución: <span><?= $pend['fecha_devolucion_limite']; ?></span></p>
                         <p>Multa: <span><?= $pend['multa']; ?> €</span></p>
-                        <p>Estado: <span><?= $estado; ?></span></p>
+                        <p>Estado: <span><?= $estado['mensaje']; ?></span></p>
                         <?php
                             $fechaHoy = date('Y-m-d');
                             if ($pend['usuario_id'] == $_SESSION['user']['id']) {
@@ -150,7 +159,7 @@ $historial = $prestamosHistorial ?? [];
                         </form>
                             <?php } else { ?>
                                 <div class="message-otro-usuario">
-                                    <p><span>Aún falta para que devuelvas el libro. (<?= $pend['fecha_devolucion']; ?>).</span></p>
+                                    <p><span>Aún falta para que devuelvas el libro (<?= $pend['fecha_devolucion']; ?>).</span></p>
                                 </div>
                         <?php
                                 }
@@ -164,7 +173,7 @@ $historial = $prestamosHistorial ?? [];
                                 }
                         ?>  
                         <div class="message-otro-usuario">
-                            <p><span>Está logueado con el usuario <?= $_SESSION['user']['nombre']; ?>. <?= empty($usuarioAct) ? '' : 'Debe iniciar sesión con el usuario ' . $usuarioAct; ?><span>.</p>
+                            <p><span>Está logueado con el usuario <?= $_SESSION['user']['nombre']; ?>. <?= empty($usuarioAct) ? '' : 'Debes iniciar sesión con el usuario ' . $usuarioAct; ?><span>.</p>
                         </div>
                         <?php }?>
                     </div>
@@ -198,8 +207,18 @@ $historial = $prestamosHistorial ?? [];
                             <td><?= $h['nombre_usuario'] ?></td>
                             <td><?= $h['fecha_devolucion_limite'] ?></td>
                             <td><?= $h['fecha_devuelto'] ?></td>
-                            <td style="font-weight:bold;"><?= $estado; ?></td>
-                            <td><?= number_format($h['multa'], 2) . ' €' ?></td>
+                            <td><?= $estado['mensaje']; ?></td>
+                            <td>
+                                <?php
+                                    if ($estado['multa'] === 2) {
+                                        echo "Pagar una multa de ". number_format($h['multa'], 2) . " €.";
+                                    } elseif ($estado['multa'] === 1) {
+                                        echo "El libro se devolvio a tiempo, no hay multa.";
+                                    } else {
+                                        echo "Ninguna multa que pagar";
+                                    }
+                                ?>
+                            </td>
                         </tr>
                     <?php } ?>
                 </tbody>
